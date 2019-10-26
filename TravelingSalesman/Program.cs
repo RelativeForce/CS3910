@@ -39,6 +39,7 @@ namespace TravelingSalesman
 
         private static void CheckRoute(AdjacencyMatrix matrix)
         {
+            Console.WriteLine("\nCheck Route");
             Console.Write("Please input a route to evaluate (enter to skip): ");
 
             var routeString = Console.ReadLine();
@@ -55,7 +56,7 @@ namespace TravelingSalesman
 
         private static void RandomSearch(AdjacencyMatrix matrix)
         {
-            Console.WriteLine("Random Search");
+            Console.WriteLine("\nRandom Search");
             Console.Write("Please input the number of random searches (enter to skip): ");
 
             var numberString = Console.ReadLine() ?? "";
@@ -80,7 +81,7 @@ namespace TravelingSalesman
         {
             const double speedOfAnt = 0.15;
 
-            Console.WriteLine("Ant Colony Optimisation");
+            Console.WriteLine("\nAnt Colony Optimisation");
 
             Console.Write("Please input the number of ants (enter to skip): ");
 

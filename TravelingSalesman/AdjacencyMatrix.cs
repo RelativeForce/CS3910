@@ -28,7 +28,11 @@ namespace TravelingSalesman
                 int y = 0;
                 foreach (var target in map.Nodes)
                 {
-                    _matrix[Index(x, y)] = node.Links.FirstOrDefault(l => l.Same(node, target))?.Distance ?? -1;
+                    if(node != target)
+                    {
+                        _matrix[Index(x, y)] = node.Links.First(l => l.Same(node, target)).Distance;
+                    }
+                    
                     y++;
                 }
                 x++;
@@ -122,10 +126,13 @@ namespace TravelingSalesman
 
         public void TraverseAllRoutes()
         {
-            Console.WriteLine("Check all routes");
+            Console.WriteLine("\nCheck all routes");
 
-            Console.Write("Please input the starting node: ");
+            Console.Write("Please input the starting node (enter to skip): ");
             var startName = Console.ReadLine() ?? "";
+
+            if (string.IsNullOrWhiteSpace(startName))
+                return;
 
             var start = NameToIndex(startName);
 

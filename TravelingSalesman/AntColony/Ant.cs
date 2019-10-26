@@ -59,7 +59,7 @@ namespace TravelingSalesman.Ants
 
         private void ResetPath()
         {
-            _remainingNodes = _allNodes.Where(n => n != _startingNode).ToList();
+            _remainingNodes = _allNodes.Take(1).ToList();
         }
 
         private void SelectNextNode()
