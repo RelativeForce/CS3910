@@ -5,8 +5,9 @@ namespace TravelingSalesman
 {
     public sealed class Route
     {
-        public IList<Node> Nodes { get; private set; }
-        public double Length { get; private set; }
+        public IList<int> Indexes;
+        public IList<Node> Nodes;
+        public double Length;
         public string Path {
             get {
 
@@ -27,26 +28,11 @@ namespace TravelingSalesman
             }
         }
 
-        public Route()
+        public Route(IList<int> indexes, IList<Node> nodes, double length)
         {
-            Update(new List<Node>(), -1);
-        }
-
-        public Route(IList<Node> route, double length)
-        {
-            Update(route, length);
-        }
-
-        public void Update(IList<Node> route, double length)
-        {
-            Nodes = route;
+            Indexes = indexes;
             Length = length;
-        }
-
-        public void Update(Route route)
-        {
-            Nodes = route.Nodes;
-            Length = route.Length;
+            Nodes = nodes;
         }
     }
 }

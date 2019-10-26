@@ -2,30 +2,30 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace TravelingSalesman
+namespace TravelingSalesman.Ants
 {
     public sealed class Ant
     {
         private static readonly Random Generator = new Random();
 
         private readonly double _speed;
-        private readonly Node _startingNode;
-        private Node _currentNode;
-        private readonly IList<Node> _allNodes;
-        private IList<Node> _remainingNodes;
+        private readonly int _startingNode;
+        private int _currentNode;
+        private readonly IList<int> _allNodes;
+        private readonly AntColonyAdjacencyMatrix _matrix;
+        private IList<int> _remainingNodes;
         private double _remainingDistanceToNextNode;
-        private Node _nextNode;
-        private Link _currentLink;
+        private int? _nextNode;
 
-        public Ant(double speed, Node startingNode, IList<Node> allNodes)
+        public Ant(double speed, int startingNode, AntColonyAdjacencyMatrix matrix)
         {
             _speed = speed;
             _currentNode = startingNode;
             _startingNode = startingNode;
-            _allNodes = allNodes;
+            _allNodes = matrix.Indexes;
+            _matrix = matrix;
             _remainingDistanceToNextNode = 0;
             _nextNode = null;
-            _currentLink = null;
 
             ResetPath();
         }
@@ -39,9 +39,7 @@ namespace TravelingSalesman
 
                 if (!remainingNodes && !completedPath)
                 {
-                    var link = _currentNode.Links.First(l => l.Same(_currentNode, _startingNode));
-
-                    SetNextNode(link);
+                    SetNextNode(_startingNode);
                 }
                 else
                 {
@@ -68,44 +66,42 @@ namespace TravelingSalesman
         {
             if (_nextNode != null)
             {
-                _currentNode = _nextNode;
+                _currentNode = _nextNode.Value;
                 _nextNode = null;
-                _currentLink = null;
                 _remainingDistanceToNextNode = 0;
             }
 
-            Link bestLink = null;
+            int? bestNode = null;
             double desirability = 0;
-            foreach (var node in _currentNode.LinkedTo.Where(n => _remainingNodes.Contains(n)))
+            foreach (var node in _remainingNodes)
             {
-                var link = _currentNode.Links.First(l => l.Same(_currentNode, node));
+                var currentDesireability = GetDesirabilityFactor(node);
 
-                var currentLinkFactor = GetDesirabilityFactor(link);
-
-                if (bestLink != null && !(desirability < currentLinkFactor)) 
+                if (bestNode != null && !(desirability < currentDesireability))
                     continue;
 
-                bestLink = link;
-                desirability = currentLinkFactor;
+                bestNode = node;
+                desirability = currentDesireability;
             }
 
-            SetNextNode(bestLink);
-        }
-        
-        private static double GetDesirabilityFactor(Link link)
-        {
-            var randomness = (Math.Pow(Generator.NextDouble(), 2) * -1) + 1;
-
-            return (link.PheromoneOnLink - link.Distance) * randomness;
+            SetNextNode(bestNode.Value);
         }
 
-        private void SetNextNode(Link link)
+        private double GetDesirabilityFactor(int node)
         {
-            _nextNode = link.A == _currentNode ? link.B : link.A;
-            _currentLink = link;
-            _remainingDistanceToNextNode = link.Distance;
-            _remainingNodes.Remove(_nextNode);
-            _currentLink.Compound();
+            var randomness = Math.Pow(Generator.NextDouble(), 2) * -1 + 1;
+            var distance = _matrix.Distance(_currentNode, node);
+            var pheromoneOnLink = _matrix.Pheromone(_currentNode, node);
+
+            return (pheromoneOnLink - distance) * randomness;
+        }
+
+        private void SetNextNode(int node)
+        {
+            _nextNode = node;
+            _remainingDistanceToNextNode = _matrix.Distance(_currentNode, node);
+            _remainingNodes.Remove(node);
+            _matrix.Compound(_currentNode, node);
         }
 
         private void Travel()
