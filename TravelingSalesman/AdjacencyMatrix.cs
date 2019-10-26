@@ -120,15 +120,27 @@ namespace TravelingSalesman
             return cost;
         }
 
-        public void TraverseAllRoutes(Route best)
+        public void TraverseAllRoutes()
         {
-            var first = best.Nodes.First();
+            Console.WriteLine("Check all routes");
 
-            Console.WriteLine($"Searching all combinations starting at { first.Name }\n");
+            Console.Write("Please input the starting node: ");
+            var startName = Console.ReadLine() ?? "";
 
-            Traverse(ref best, new List<int> { best.Indexes.First() });
+            var start = NameToIndex(startName);
+
+            Console.WriteLine($"Searching all combinations starting at { startName }\n");
+
+            Route best = null;
+
+            Traverse(ref best, new List<int> { start });
 
             Console.WriteLine("Done " + best.Path + "- " + best.Length);
+        }
+
+        public int NameToIndex(string name)
+        {
+            return Nodes.IndexOf(Nodes.First(n => n.Name.Equals(name)));
         }
 
         protected int Index(int x, int y)
@@ -151,7 +163,7 @@ namespace TravelingSalesman
 
                 var route = ToRoute(currentRoute);
 
-                if (bestRoute.Length > route.Length || bestRoute.Length == -1)
+                if (bestRoute == null || bestRoute.Length > route.Length)
                 {
                     bestRoute = route;
                     Console.WriteLine("\n" + bestRoute.Path + "- " + bestRoute.Length + "\n");
