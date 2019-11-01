@@ -57,7 +57,7 @@ namespace AntennaArray
                     if (particle.Position.Value < newBestPosition.Value)
                     {
                         newBestPosition = particle.Position.Clone();
-                        Console.WriteLine($"New Best Found [Iteration: {i} Value: {newBestPosition.Value}]");
+                        Console.WriteLine($"New Best Found [Iteration: {i} Value: {newBestPosition.Value} Positions: {newBestPosition.Vector.Aggregate("", (str, v) => v + " " + str)}]");
                     }
                 }
 
