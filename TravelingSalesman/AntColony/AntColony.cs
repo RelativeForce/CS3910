@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace TravelingSalesman.Ants
+namespace TravelingSalesman.AntColony
 {
     public sealed class AntColony
     {

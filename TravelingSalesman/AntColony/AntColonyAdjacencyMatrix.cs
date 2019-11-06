@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace TravelingSalesman.Ants
+namespace TravelingSalesman.AntColony
 {
     public class AntColonyAdjacencyMatrix : AdjacencyMatrix
     {

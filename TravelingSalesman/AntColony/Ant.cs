@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace TravelingSalesman.Ants
+namespace TravelingSalesman.AntColony
 {
     public sealed class Ant
     {
@@ -75,13 +75,13 @@ namespace TravelingSalesman.Ants
             double desirability = 0;
             foreach (var node in _remainingNodes)
             {
-                var currentDesireability = GetDesirabilityFactor(node);
+                var currentDesirability = GetDesirabilityFactor(node);
 
-                if (bestNode != null && !(desirability < currentDesireability))
+                if (bestNode != null && !(desirability < currentDesirability))
                     continue;
 
                 bestNode = node;
-                desirability = currentDesireability;
+                desirability = currentDesirability;
             }
 
             SetNextNode(bestNode.Value);

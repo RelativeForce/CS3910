@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using TravelingSalesman.Ants;
+using TravelingSalesman.AntColony;
 
 namespace TravelingSalesman
 {
@@ -98,7 +98,7 @@ namespace TravelingSalesman
             Console.Write("Please input the starting node: ");
             var startName = Console.ReadLine() ?? "";
 
-            var antColony = new AntColony(matrix);
+            var antColony = new AntColony.AntColony(matrix);
 
             var antRoute = antColony.SimulateAnts(numberOfAntIterations, numberOfAnts, speedOfAnt, matrix.NameToIndex(startName));
 
