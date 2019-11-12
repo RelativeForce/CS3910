@@ -9,3 +9,6 @@
 /.vs
 /Coursework/obj
 /Coursework/bin/Debug/netcoreapp3.0
+/ParticleSwarmOptimisation/obj/Debug/netcoreapp3.0
+/ParticleSwarmOptimisation/obj
+/ParticleSwarmOptimisation/bin/Debug/netcoreapp3.0

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace AntennaArray
+namespace ParticleSwarmOptimisation
 {
     public class Position
     {

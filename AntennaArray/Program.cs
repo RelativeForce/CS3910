@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ParticleSwarmOptimisation;
 
 namespace AntennaArray
 {
@@ -26,45 +27,11 @@ namespace AntennaArray
 
             var particles = GenerateParticles(numberOfParticles, numberOfAntenna, antenna.Evaluate);
 
-            var initialBestPosition = particles.OrderBy(p => p.Position.Value).First().Position;
+            
 
-            var bestPosition = RunProblem(numberOfIterations, initialBestPosition, particles, antenna);
+            var bestPosition = ParticleSwarm.Simulate(numberOfIterations, particles, antenna.Evaluate);
 
             Console.WriteLine($"Best found after {numberOfIterations} iterations was {bestPosition.Value}");
-        }
-
-        private static Position RunProblem(int numberOfIterations, Position initialBestPosition, List<Particle> particles, AntennaArray antenna)
-        {
-            var globalBestPosition = initialBestPosition;
-
-            for (int i = 0; i < numberOfIterations; i++)
-            {
-                var newBestPosition = globalBestPosition;
-
-                foreach (var particle in particles)
-                {
-                    particle.GlobalBest = globalBestPosition;
-
-                    particle.Move();
-
-                    particle.Position.EvaluateWith(antenna.Evaluate);
-
-                    if (particle.Position.Value < particle.PersonalBest.Value)
-                    {
-                        particle.PersonalBest = particle.Position.Clone();
-                    }
-
-                    if (particle.Position.Value < newBestPosition.Value)
-                    {
-                        newBestPosition = particle.Position.Clone();
-                        Console.WriteLine($"New Best Found [Iteration: {i} Value: {newBestPosition.Value} Positions: {newBestPosition.Vector.Aggregate("", (str, v) => v + " " + str)}]");
-                    }
-                }
-
-                globalBestPosition = newBestPosition;
-            }
-
-            return globalBestPosition;
         }
 
         private static List<Particle> GenerateParticles(int numberOfParticles, int numberOfAntenna, Func<double[], double> evaluator)
@@ -101,11 +68,7 @@ namespace AntennaArray
 
                 velocity[numberOfAntenna - 1] = 0;
 
-                var position = new Position(positionArray);
-
-                position.EvaluateWith(evaluator);
-
-                var particle = new Particle(velocity, position);
+                var particle = new Particle(velocity, new Position(positionArray));
 
                 particles.Add(particle);
                 Console.WriteLine($"Generated particle {particles.Count}");

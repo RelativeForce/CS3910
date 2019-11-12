@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 
-namespace AntennaArray
+namespace ParticleSwarmOptimisation
 {
     public class Particle
     {
@@ -11,11 +10,10 @@ namespace AntennaArray
         public const double Inertia = 0.01;
 
         public Position GlobalBest { get; set; }
-        public Position Position { get; set; }
+        public Position Position { get; private set; }
 
         public Position PersonalBest { get; set; }
         private readonly double[] _velocity;
-        private readonly Random _random;
 
         public Particle([NotNull] double[] velocity, [NotNull] Position position)
         {
@@ -23,7 +21,15 @@ namespace AntennaArray
             Position = position;
             PersonalBest = Position.Clone();
             GlobalBest = Position.Clone();
-            _random = new Random();
+        }
+
+        public Particle([NotNull] Position position) : this(GenerateRandomVelocity(position.Vector.Length), position)
+        {
+        }
+
+        public void EvaluateCurrentPositionWith(Func<double[], double> evaluator)
+        {
+            Position.EvaluateWith(evaluator);
         }
 
         public void Move()
@@ -68,13 +74,15 @@ namespace AntennaArray
             return result;
         }
 
-        private double[] GenerateRandomVelocity(int length)
+        private static double[] GenerateRandomVelocity(int length)
         {
+            var random = new Random();
+
             var velocity = new double[length];
 
             for (int i = 0; i < velocity.Length; i++)
             {
-                velocity[i] = _random.NextDouble();
+                velocity[i] = random.NextDouble();
             }
 
             return velocity;
