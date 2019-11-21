@@ -7,6 +7,8 @@ namespace Coursework
 {
     public sealed class Hub
     {
+        public const double GlobalPullFactor = 0.05;
+        public const double PersonalPullFactor = 0.05;
         private readonly int _numberOfLocations;
         private readonly List<Day> _days;
         private readonly double _initialMinimumEstimate;
@@ -22,42 +24,18 @@ namespace Coursework
             _random = new Random();
         }
 
-        public double[] Simulate(int numberOfEstimationParticles, int numberOfIterationsPerDay)
+        public double[] Simulate(int numberOfEstimationParticles, int numberOfIterations)
         {
             var particles = GenerateParticles(numberOfEstimationParticles);
 
-            ParticleSwarm.Simulate(numberOfIterationsPerDay, particles, Cost, false);
+            var position = ParticleSwarm.Simulate(numberOfIterations, 100, particles);
 
-            return Average(particles);
+            return position.Vector;
         }
 
-        public static double ToTrucks(double estimate)
-        {
-            return Math.Ceiling(estimate / Program.PalletsPerTruck);
-        }
-        
         public double Cost(double[] estimates)
         {
-            return _days.Select(d => d.Cost(estimates)).Average();
-        }
-
-        public bool IsValid(double[] position)
-        {
-            return !position.Any(estimate => estimate < 0);
-        }
-
-        public double[] Average(List<Particle> particles)
-        {
-            var positions = particles.Select(p => p.Position.Vector).Where(IsValid).ToList();
-
-            var estimate = new double[_numberOfLocations];
-
-            for (int locationIndex = 0; locationIndex < _numberOfLocations; locationIndex++)
-            {
-                estimate[locationIndex] = positions.Average(p => p[locationIndex]);
-            }
-
-            return estimate;
+            return _days.Select(d => d.Cost(estimates)).Sum();
         }
 
         public List<Particle> GenerateParticles(int numberOfParticles)
@@ -70,10 +48,10 @@ namespace Coursework
 
                 for (int estimateIndex = 0; estimateIndex < _numberOfLocations; estimateIndex++)
                 {
-                    estimates[estimateIndex] = _initialMinimumEstimate + ((_initialRangeOfEstimate - _initialMinimumEstimate) * _random.NextDouble());
+                    estimates[estimateIndex] = _initialMinimumEstimate + (_initialRangeOfEstimate * _random.NextDouble());
                 }
 
-                particles.Add(new Particle(new Position(estimates)));
+                particles.Add(new Particle(new Position(estimates), Cost, PersonalPullFactor, GlobalPullFactor));
             }
 
             return particles;

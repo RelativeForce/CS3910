@@ -6,48 +6,91 @@ namespace ParticleSwarmOptimisation
 {
     public static class ParticleSwarm
     {
-        public static Position Simulate(int numberOfIterations, List<Particle> particles, Func<double[], double> evaluator, bool maximise = true)
+        public static Position Simulate(int numberOfIterations, int evolutionRate, List<Particle> particles)
         {
-            particles.ForEach(p => p.EvaluateCurrentPositionWith(evaluator));
+            particles.ForEach(p => p.EvaluateCurrentPosition());
 
-            var globalBestPosition = particles.OrderBy(p => p.Position.Value).First().Position;
+            Particle.GlobalBest = particles.OrderBy(p => p.Position.Value).First().Position;
 
             for (int i = 0; i < numberOfIterations; i++)
             {
-                var newBestPosition = globalBestPosition;
-
-                foreach (var particle in particles)
+                if (i % evolutionRate == 0)
                 {
-                    particle.GlobalBest = globalBestPosition;
-
-                    particle.Move();
-
-                    particle.EvaluateCurrentPositionWith(evaluator);
-
-                    if (IsBetter(particle.Position, particle.PersonalBest, maximise))
+                    if(i != 0)
                     {
-                        particle.PersonalBest = particle.Position.Clone();
+                        Evolve(particles);
                     }
 
-                    if (IsBetter(particle.Position, newBestPosition, maximise))
-                    {
-                        newBestPosition = particle.Position.Clone();
-                        Console.WriteLine($"New Best Found [Iteration: {i} Value: {newBestPosition.Value} Positions: {newBestPosition.Vector.Aggregate("", (str, v) => v + " " + str)}]");
-                    }
+                    particles.ForEach(p => p.TrackPosition());
                 }
 
-                globalBestPosition = newBestPosition;
+                var parallel = particles.AsParallel();
+
+                foreach (var particle in parallel)
+                {
+                    particle.Move();
+                }
+
+                var newGlobalBestPosition = particles.OrderBy(p => p.Position.Value).First().Position;
+
+                if (newGlobalBestPosition.Value < Particle.GlobalBest.Value)
+                {
+                    Console.WriteLine($"New Best Found [Iteration: {i} Value: {newGlobalBestPosition.Value}]");
+                    Particle.GlobalBest = newGlobalBestPosition;
+                }
             }
 
-            return globalBestPosition;
+            return Particle.GlobalBest;
         }
 
-        private static bool IsBetter(Position a, Position b, bool maximise)
+        private static void Evolve(List<Particle> particles)
         {
-            var aValue = a.Value;
-            var bValue = b.Value;
+            var selected = Select(particles);
 
-            return maximise ? aValue < bValue : aValue > bValue;
+            var offspring = Recombine(selected);
+
+            particles.Clear();
+            particles.AddRange(Survivors(offspring));
+        }
+
+        private static List<Particle> Select(List<Particle> particles)
+        {
+            var random = new Random();
+
+            var even = particles.Count % 2 == 0;
+
+
+
+            var parents = particles.TakeLast(particles.Count / 2);
+
+            return particles;
+        }
+
+        private static List<Particle> Recombine(List<Particle> particles)
+        {
+            var random = new Random();
+
+            var even = particles.Count % 2 == 0;
+
+
+
+            var parents = particles.TakeLast(particles.Count / 2);
+
+            return particles;
+        }
+
+
+        private static List<Particle> Survivors(List<Particle> particles)
+        {
+            var random = new Random();
+
+            var even = particles.Count % 2 == 0;
+
+
+
+            var parents = particles.TakeLast(particles.Count / 2);
+
+            return particles;
         }
     }
 }

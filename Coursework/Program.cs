@@ -9,7 +9,6 @@ namespace Coursework
     {
         private const string DefaultFilePath = "..\\..\\..\\cwk_train.csv";
         private const int NumberOfDestinations = 13;
-        public const double PalletsPerTruck = 35.0;
 
         static void Main(string[] args)
         {
@@ -21,11 +20,11 @@ namespace Coursework
 
             var days = ReadFile(filePath);
 
-            var hub = new Hub(NumberOfDestinations, days, 3.5 * PalletsPerTruck, 5.6 * PalletsPerTruck);
+            var hub = new Hub(NumberOfDestinations, days, 0, 30);
 
-            var finalResult = hub.Simulate(50, 10000);
+            var finalResult = hub.Simulate(50, 1000000);
 
-            Console.WriteLine($"Best Result: {hub.Cost(finalResult)} [{finalResult.Select(Hub.ToTrucks).Aggregate("", (s, e) => s + e + " ")}]");
+            Console.WriteLine($"Best Result: {hub.Cost(finalResult)} [{finalResult.Aggregate("", (s, e) => s + e + " ")}]");
 
         }
 

@@ -14,20 +14,15 @@ namespace Coursework
             _measurements = measurements;
         }
 
-        public double ActualDemand()
+        public double Cost(double[] weights)
         {
-            return _actualDemand;
-        }
+            var weightArray = weights.ToArray();
 
-        public double Cost(double[] estimates)
-        {
-            var estimatedTruckCapacity = estimates.Select(Hub.ToTrucks).ToArray();
+            var sum = Enumerable
+                .Zip(_measurements, weightArray, (measurement, weight) => weight * measurement)
+                .Sum();
 
-            var average = Enumerable
-                .Zip(_measurements, estimatedTruckCapacity, (demand, estimate) => Math.Abs(estimate - demand))
-                .Average();
-
-            return average;
+            return Math.Abs(_actualDemand - sum);
         }
     }
 }

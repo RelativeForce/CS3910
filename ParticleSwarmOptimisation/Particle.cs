@@ -1,35 +1,42 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 
 namespace ParticleSwarmOptimisation
 {
     public class Particle
     {
-        public const double GlobalPullFactor = 0.05;
-        public const double PersonalPullFactor = 0.05;
         public const double Inertia = 0.01;
 
-        public Position GlobalBest { get; set; }
+        public static Position GlobalBest { get; set; }
         public Position Position { get; private set; }
-
         public Position PersonalBest { get; set; }
-        private readonly double[] _velocity;
 
-        public Particle([NotNull] double[] velocity, [NotNull] Position position)
+        private readonly double[] _velocity;
+        private readonly Func<double[], double> _evaluator;
+
+        private double _personalPullFactor;
+        private double _globalPullFactor;
+        private double _trackedValue;
+
+        public Particle(Position position, Func<double[], double> evaluator, double personalPullFactor, double globalPullFactor)
         {
-            _velocity = velocity;
+            _evaluator = evaluator;
+            _personalPullFactor = personalPullFactor;
+            _globalPullFactor = globalPullFactor;
+            _velocity = GenerateRandomVelocity(position.Vector.Length);
+            _trackedValue = 0;
             Position = position;
             PersonalBest = Position.Clone();
             GlobalBest = Position.Clone();
         }
 
-        public Particle([NotNull] Position position) : this(GenerateRandomVelocity(position.Vector.Length), position)
+        public void EvaluateCurrentPosition()
         {
-        }
+            Position.EvaluateWith(_evaluator);
 
-        public void EvaluateCurrentPositionWith(Func<double[], double> evaluator)
-        {
-            Position.EvaluateWith(evaluator);
+            if (Position.Value < PersonalBest.Value)
+            {
+                PersonalBest = Position.Clone();
+            }
         }
 
         public void Move()
@@ -37,6 +44,18 @@ namespace ParticleSwarmOptimisation
             UpdateVelocity();
 
             UpdatePosition();
+
+            EvaluateCurrentPosition();
+        }
+
+        public void TrackPosition()
+        {
+            _trackedValue = Position.Value;
+        }
+
+        public double Improvement()
+        {
+            return Position.Value - _trackedValue;
         }
 
         private void UpdatePosition()
@@ -52,8 +71,8 @@ namespace ParticleSwarmOptimisation
             for (var i = 0; i < newVelocity.Length; i++)
             {
                 newVelocity[i] = randomVelocity[i] * ((Inertia * _velocity[i]) +
-                                 (GlobalPullFactor * (GlobalBest.Vector[i] - Position.Vector[i])) +
-                                 (PersonalPullFactor * (PersonalBest.Vector[i] - Position.Vector[i])));
+                                 (_globalPullFactor * (GlobalBest.Vector[i] - Position.Vector[i])) +
+                                 (_personalPullFactor * (PersonalBest.Vector[i] - Position.Vector[i])));
             }
 
             for (var i = 0; i < newVelocity.Length; i++)

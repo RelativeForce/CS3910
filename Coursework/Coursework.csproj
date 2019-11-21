@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AntennaArray\AntennaArray.csproj" />
+    <ProjectReference Include="..\ParticleSwarmOptimisation\ParticleSwarmOptimisation.csproj" />
   </ItemGroup>
 
 </Project>

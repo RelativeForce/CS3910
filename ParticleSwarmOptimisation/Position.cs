@@ -11,6 +11,7 @@ namespace ParticleSwarmOptimisation
         public Position(double[] vector)
         {
             Vector = vector;
+            Value = double.MaxValue;
         }
 
         private Position()

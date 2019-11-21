@@ -3,13 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29403.142
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AntennaArray", "AntennaArray\AntennaArray.csproj", "{FD2B8E83-E074-40A3-8871-D88B9AC722AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Coursework", "Coursework\Coursework.csproj", "{D6AE1CF3-30A0-4101-979B-30380EED64CB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TravelingSalesman", "TravelingSalesman\TravelingSalesman.csproj", "{26811370-C9B1-4001-A405-BBC3CA49D226}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Coursework", "Coursework\Coursework.csproj", "{D6AE1CF3-30A0-4101-979B-30380EED64CB}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParticleSwarmOptimisation", "ParticleSwarmOptimisation\ParticleSwarmOptimisation.csproj", "{64B1AEF3-3866-4A83-8BB0-A424C9450F2A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParticleSwarmOptimisation", "ParticleSwarmOptimisation\ParticleSwarmOptimisation.csproj", "{64B1AEF3-3866-4A83-8BB0-A424C9450F2A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,14 +13,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{FD2B8E83-E074-40A3-8871-D88B9AC722AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FD2B8E83-E074-40A3-8871-D88B9AC722AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FD2B8E83-E074-40A3-8871-D88B9AC722AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FD2B8E83-E074-40A3-8871-D88B9AC722AA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{26811370-C9B1-4001-A405-BBC3CA49D226}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{26811370-C9B1-4001-A405-BBC3CA49D226}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{26811370-C9B1-4001-A405-BBC3CA49D226}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{26811370-C9B1-4001-A405-BBC3CA49D226}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D6AE1CF3-30A0-4101-979B-30380EED64CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D6AE1CF3-30A0-4101-979B-30380EED64CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6AE1CF3-30A0-4101-979B-30380EED64CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
