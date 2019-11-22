@@ -6,15 +6,16 @@ namespace ParticleSwarmOptimisation
     {
         public const double Inertia = 0.01;
 
-        private double _personalPullFactor;
-        private double _globalPullFactor;
+        public readonly double PersonalPullFactor;
+        public readonly double GlobalPullFactor;
+
         private double _trackedValue;
         private double _mostRecentValue;
 
         public Attraction(double personalPullFactor, double globalPullFactor)
         {
-            _personalPullFactor = personalPullFactor;
-            _globalPullFactor = globalPullFactor;
+            PersonalPullFactor = personalPullFactor;
+            GlobalPullFactor = globalPullFactor;
             _trackedValue = double.MaxValue;
             _mostRecentValue = double.MaxValue;
         }
@@ -41,8 +42,8 @@ namespace ParticleSwarmOptimisation
             for (var i = 0; i < newVelocity.Length; i++)
             {
                 newVelocity[i] =  ((Inertia * currentVelocity.Vector[i]) + 
-                                   (r1[i] * _globalPullFactor * globalBestVector[i]) +
-                                   (r2[i] * _personalPullFactor * personalBestVector[i]));
+                                   (r1[i] * GlobalPullFactor * globalBestVector[i]) +
+                                   (r2[i] * PersonalPullFactor * personalBestVector[i]));
             }
 
             return new Velocity(newVelocity);

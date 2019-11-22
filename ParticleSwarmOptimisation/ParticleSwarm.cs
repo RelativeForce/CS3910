@@ -26,9 +26,7 @@ namespace ParticleSwarmOptimisation
                     particles.ForEach(p => p.TrackPosition());
                 }
 
-                var parallel = particles.AsParallel();
-
-                foreach (var particle in parallel)
+                foreach (var particle in particles.AsParallel())
                 {
                     particle.Move();
                 }
@@ -47,11 +45,16 @@ namespace ParticleSwarmOptimisation
 
         private static void Evolve(List<Particle> particles)
         {
-            var selectedAttractions = SelectParents(particles);
+            var parents = SelectParents(particles);
 
-            var offspring = Recombine(selectedAttractions);
+            var offspring = Reproduce(parents);
 
-            Survivors(offspring);
+            var survivors = Survivors(offspring, particles.Select(p => p.Attraction).ToList());
+
+            for (int i = 0; i < particles.Count; i++)
+            {
+                particles[i].Attraction = survivors[i];
+            }
         }
 
         private static List<Attraction> SelectParents(List<Particle> particles)
@@ -71,7 +74,7 @@ namespace ParticleSwarmOptimisation
                 }
 
                 var parent = contenders.OrderByDescending(a => a.Improvement).First();
-
+                
                 parents.Add(parent);
 
                 if (attractions.Count < K)
@@ -81,31 +84,72 @@ namespace ParticleSwarmOptimisation
             return parents;
         }
 
-        private static List<Attraction> Recombine(List<Attraction> particles)
+        private static List<Attraction> Reproduce(List<Attraction> parents)
         {
-            var random = new Random();
+            var children = new List<Attraction>();
 
-            var even = particles.Count % 2 == 0;
+            var canSelectParent = true;
 
+            
 
+            while (canSelectParent)
+            {
+                var parent1 = parents.PickRandom();
+                var parent2 = parents.PickRandom();
 
-            var parents = particles.TakeLast(particles.Count / 2);
+                var c1p = Recombine(parent1.PersonalPullFactor, parent2.GlobalPullFactor);
+                var c1g = Recombine(parent2.PersonalPullFactor, parent1.GlobalPullFactor);
+                
+                var c2p = Recombine(parent2.PersonalPullFactor, parent1.GlobalPullFactor);
+                var c2g = Recombine(parent1.PersonalPullFactor, parent2.GlobalPullFactor);
 
-            return particles;
+                var child1 = new Attraction(c1p, c1g);
+                var child2 = new Attraction(c2p, c2g);
+
+                children.Add(child1);
+                children.Add(child2);
+
+                if (parents.Count < 2)
+                    canSelectParent = false;
+            }
+
+            children.AddRange(parents);
+
+            return children;
         }
 
-
-        private static List<Attraction> Survivors(List<Attraction> particles)
+        private static double Recombine(double factor1, double factor2)
         {
             var random = new Random();
 
-            var even = particles.Count % 2 == 0;
+            var value = (factor1 + factor2) * PesudoNormalDistribution() / 2;
 
+            // 5% chance of crazy mutation
+            if (random.NextDouble() < 0.05)
+            {
+                value = 1.0 / value;
+            }
 
+            return value;
+        }
 
-            var parents = particles.TakeLast(particles.Count / 2);
+        private static double PesudoNormalDistribution()
+        {
+            var random = new Random();
 
-            return particles;
+            return (Math.Pow(random.NextDouble(), 2) * -1) + 1;
+        }
+
+        private static List<Attraction> Survivors(List<Attraction> children, List<Attraction> all)
+        {
+            var total = all.Count;
+
+            while (children.Count < total)
+            {
+                children.Add(all.PickRandom());
+            }
+            
+            return children;
         }
     }
 }

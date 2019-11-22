@@ -7,20 +7,16 @@ namespace Coursework
 {
     public sealed class Hub
     {
-        public const double GlobalPullFactor = 0.05;
-        public const double PersonalPullFactor = 0.05;
+        public const double InitialGlobalPullFactor = 0.1;
+        public const double InitialPersonalPullFactor = 0.5;
         private readonly int _numberOfLocations;
         private readonly List<Day> _days;
-        private readonly double _initialMinimumEstimate;
-        private readonly double _initialRangeOfEstimate;
         private readonly Random _random;
 
-        public Hub(int numberOfLocations, List<Day> days, double initialMinimumEstimate, double initialRangeOfEstimate)
+        public Hub(int numberOfLocations, List<Day> days)
         {
             _numberOfLocations = numberOfLocations;
             _days = days;
-            _initialMinimumEstimate = initialMinimumEstimate;
-            _initialRangeOfEstimate = initialRangeOfEstimate;
             _random = new Random();
         }
 
@@ -28,7 +24,7 @@ namespace Coursework
         {
             var particles = GenerateParticles(numberOfEstimationParticles);
 
-            var position = ParticleSwarm.Simulate(numberOfIterations, 100, particles);
+            var position = ParticleSwarm.Simulate(numberOfIterations, 10, particles);
 
             return position.Vector;
         }
@@ -48,10 +44,14 @@ namespace Coursework
 
                 for (int estimateIndex = 0; estimateIndex < _numberOfLocations; estimateIndex++)
                 {
-                    estimates[estimateIndex] = _initialMinimumEstimate + (_initialRangeOfEstimate * _random.NextDouble());
+                    estimates[estimateIndex] = _random.NextDouble();
                 }
 
-                particles.Add(new Particle(new Position(estimates), Cost, PersonalPullFactor, GlobalPullFactor));
+                var personalPull = InitialPersonalPullFactor * _random.NextDouble();
+                var globalPull = InitialGlobalPullFactor * _random.NextDouble();
+
+
+                particles.Add(new Particle(new Position(estimates), Cost, new Attraction(personalPull, globalPull)));
             }
 
             return particles;

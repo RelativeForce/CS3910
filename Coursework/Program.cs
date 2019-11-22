@@ -20,9 +20,9 @@ namespace Coursework
 
             var days = ReadFile(filePath);
 
-            var hub = new Hub(NumberOfDestinations, days, 0, 30);
+            var hub = new Hub(NumberOfDestinations, days);
 
-            var finalResult = hub.Simulate(50, 1000000);
+            var finalResult = hub.Simulate(100, 100000);
 
             Console.WriteLine($"Best Result: {hub.Cost(finalResult)} [{finalResult.Aggregate("", (s, e) => s + e + " ")}]");
 
