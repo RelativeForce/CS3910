@@ -97,14 +97,14 @@ namespace ParticleSwarmOptimisation
                 var parent1 = parents.PickRandom();
                 var parent2 = parents.PickRandom();
 
-                var c1p = Recombine(parent1.PersonalPullFactor, parent2.GlobalPullFactor);
-                var c1g = Recombine(parent2.PersonalPullFactor, parent1.GlobalPullFactor);
+                var child1Personal = Recombine(parent1.PersonalPullFactor, parent2.GlobalPullFactor);
+                var child1Global = Recombine(parent2.PersonalPullFactor, parent1.GlobalPullFactor);
                 
-                var c2p = Recombine(parent2.PersonalPullFactor, parent1.GlobalPullFactor);
-                var c2g = Recombine(parent1.PersonalPullFactor, parent2.GlobalPullFactor);
+                var child2Personal = Recombine(parent2.PersonalPullFactor, parent1.GlobalPullFactor);
+                var child2Global = Recombine(parent1.PersonalPullFactor, parent2.GlobalPullFactor);
 
-                var child1 = new Attraction(c1p, c1g);
-                var child2 = new Attraction(c2p, c2g);
+                var child1 = new Attraction(child1Personal, child1Global);
+                var child2 = new Attraction(child2Personal, child2Global);
 
                 children.Add(child1);
                 children.Add(child2);
