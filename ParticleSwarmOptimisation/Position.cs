@@ -19,6 +19,11 @@ namespace ParticleSwarmOptimisation
 
         }
 
+        public double[] VectorTo(Position position)
+        {
+            return Enumerable.Zip(Vector, position.Vector, (v1, v2) => v2 - v1).ToArray();
+        }
+
         public Position Clone()
         {
             return new Position

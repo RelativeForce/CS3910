@@ -35,7 +35,7 @@ namespace Coursework
 
         public double Cost(double[] estimates)
         {
-            return _days.Select(d => d.Cost(estimates)).Sum();
+            return _days.Select(d => d.Cost(estimates)).Average();
         }
 
         public List<Particle> GenerateParticles(int numberOfParticles)

@@ -6,6 +6,8 @@ namespace ParticleSwarmOptimisation
 {
     public static class ParticleSwarm
     {
+        private const int K = 4;
+
         public static Position Simulate(int numberOfIterations, int evolutionRate, List<Particle> particles)
         {
             particles.ForEach(p => p.EvaluateCurrentPosition());
@@ -45,15 +47,41 @@ namespace ParticleSwarmOptimisation
 
         private static void Evolve(List<Particle> particles)
         {
-            var selected = Select(particles);
+            var selectedAttractions = SelectParents(particles);
 
-            var offspring = Recombine(selected);
+            var offspring = Recombine(selectedAttractions);
 
-            particles.Clear();
-            particles.AddRange(Survivors(offspring));
+            Survivors(offspring);
         }
 
-        private static List<Particle> Select(List<Particle> particles)
+        private static List<Attraction> SelectParents(List<Particle> particles)
+        {
+            var attractions = particles.Select(p => p.Attraction).ToList();
+
+            var parents = new List<Attraction>();
+
+            var canSelectParent = true;
+
+            while (canSelectParent)
+            {
+                var contenders = new List<Attraction>();
+                for (int i = 0; i < K; i++)
+                {
+                    contenders.Add(attractions.PickRandom());
+                }
+
+                var parent = contenders.OrderByDescending(a => a.Improvement).First();
+
+                parents.Add(parent);
+
+                if (attractions.Count < K)
+                    canSelectParent = false;
+            }
+
+            return parents;
+        }
+
+        private static List<Attraction> Recombine(List<Attraction> particles)
         {
             var random = new Random();
 
@@ -66,21 +94,8 @@ namespace ParticleSwarmOptimisation
             return particles;
         }
 
-        private static List<Particle> Recombine(List<Particle> particles)
-        {
-            var random = new Random();
 
-            var even = particles.Count % 2 == 0;
-
-
-
-            var parents = particles.TakeLast(particles.Count / 2);
-
-            return particles;
-        }
-
-
-        private static List<Particle> Survivors(List<Particle> particles)
+        private static List<Attraction> Survivors(List<Attraction> particles)
         {
             var random = new Random();
 
