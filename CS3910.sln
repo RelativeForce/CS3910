@@ -5,8 +5,6 @@ VisualStudioVersion = 16.0.29403.142
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Coursework", "Coursework\Coursework.csproj", "{D6AE1CF3-30A0-4101-979B-30380EED64CB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParticleSwarmOptimisation", "ParticleSwarmOptimisation\ParticleSwarmOptimisation.csproj", "{64B1AEF3-3866-4A83-8BB0-A424C9450F2A}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{D6AE1CF3-30A0-4101-979B-30380EED64CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6AE1CF3-30A0-4101-979B-30380EED64CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D6AE1CF3-30A0-4101-979B-30380EED64CB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{64B1AEF3-3866-4A83-8BB0-A424C9450F2A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{64B1AEF3-3866-4A83-8BB0-A424C9450F2A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{64B1AEF3-3866-4A83-8BB0-A424C9450F2A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{64B1AEF3-3866-4A83-8BB0-A424C9450F2A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
