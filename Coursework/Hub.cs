@@ -6,14 +6,14 @@ namespace Coursework
 {
     public sealed class Hub
     {
-        private readonly int _numberOfLocations;
+        private readonly int _numberOfMeasurements;
         private readonly List<Day> _days;
         private readonly IParticleSwarm _particleSwarm;
         private readonly Random _random;
 
-        public Hub(int numberOfLocations, List<Day> days, IParticleSwarm particleSwarm)
+        public Hub(int numberOfMeasurements, List<Day> days, IParticleSwarm particleSwarm)
         {
-            _numberOfLocations = numberOfLocations;
+            _numberOfMeasurements = numberOfMeasurements;
             _days = days;
             _particleSwarm = particleSwarm;
             _random = new Random();
@@ -35,13 +35,13 @@ namespace Coursework
 
         private List<Particle> GenerateParticles(int particleCount)
         {
-            var particles = new List<Particle>();
+            var particles = new List<Particle>(particleCount);
 
             for (var index = 0; index < particleCount; index++)
             {
-                var estimates = new double[_numberOfLocations];
+                var estimates = new double[_numberOfMeasurements];
 
-                for (var estimateIndex = 0; estimateIndex < _numberOfLocations; estimateIndex++)
+                for (var estimateIndex = 0; estimateIndex < _numberOfMeasurements; estimateIndex++)
                 {
                     estimates[estimateIndex] = _random.NextDouble();
                 }

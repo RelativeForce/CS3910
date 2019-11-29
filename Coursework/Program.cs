@@ -7,7 +7,7 @@ namespace Coursework
 {
     public sealed class Program
     {
-        private const int NumberOfDestinations = 13;
+        private const int NumberOfMeasurments = 13;
 
         // Defaults
         private const string DefaultInputFilePath = "..\\..\\..\\cwk_train.csv";
@@ -48,7 +48,7 @@ namespace Coursework
 
             for (var i = 0; i < runCount; i++)
             {
-                var hub = new Hub(NumberOfDestinations, days, pso);
+                var hub = new Hub(NumberOfMeasurments, days, pso);
 
                 var finalResult = hub.Simulate(particleCount);
 
@@ -112,7 +112,7 @@ namespace Coursework
             {
                 var data = line.Split(',').Select(double.Parse).ToArray();
 
-                if(data.Length < NumberOfDestinations + 1)
+                if(data.Length < NumberOfMeasurments + 1)
                     throw new FormatException("Data file does not contain an appropriate amount of data");
 
                 var actualDemand = data[0];
