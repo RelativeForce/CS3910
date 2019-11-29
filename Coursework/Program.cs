@@ -27,16 +27,41 @@ namespace Coursework
 
             var days = ReadFile(filePath);
 
-            var evolution = new Evolution(DefaultIterationsPerGeneration, DefaultK, DefaultMutationProbability);
+            var iterationCount = Read("Please input the number of iterations (enter to use default): ", DefaultIterationCount, int.Parse);
+            var particleCount = Read("Please input the number of particle (enter to use default): ", DefaultParticleCount, int.Parse);
+            var iterationsPerGeneration = Read("Please input the number of iterations per generation (enter to use default): ", DefaultIterationsPerGeneration, int.Parse);
+            var mutationProbability = Read("Please input the probability of mutation (enter to use default): ", DefaultMutationProbability, double.Parse);
+            var k = Read("Please input the tournament size (enter to use default): ", DefaultK, int.Parse);
+            
+            var evolution = new Evolution(iterationsPerGeneration, k, mutationProbability);
 
-            var pso = new ParticleSwarm(evolution, DefaultIterationCount);
+            var pso = new ParticleSwarm(evolution, iterationCount);
 
             var hub = new Hub(NumberOfDestinations, days, pso);
 
-            var finalResult = hub.Simulate(DefaultParticleCount);
+            var finalResult = hub.Simulate(particleCount);
 
             Console.WriteLine($"Best Result: {hub.Cost(finalResult)} [{finalResult.Aggregate("", (s, e) => s + e + " ")}]");
+        }
 
+        private static T Read<T>(string text, T defaultValue, Func<string, T> parser)
+        {
+            Console.Write(text);
+
+            var stringValue = Console.ReadLine() ?? "";
+
+            if (string.IsNullOrWhiteSpace(stringValue))
+                return defaultValue;
+
+            try
+            {
+                return parser(stringValue);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return defaultValue;
+            }
         }
 
         private static List<Day> ReadFile(string filePath)
