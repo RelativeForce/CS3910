@@ -58,7 +58,7 @@ namespace Coursework
 
         private static bool IsEvolvingParticleSwarm()
         {
-            Console.Write($"Please input whether particle attraction evolves y/n (enter to use default {(DefaultIsEvolvingSwarm ? "y" : "n")}: ");
+            Console.Write($"Please input whether particle attraction evolves y/n (enter to use default {(DefaultIsEvolvingSwarm ? "y" : "n")}): ");
             var evolvingString = Console.ReadLine();
 
             if (string.IsNullOrWhiteSpace(evolvingString))

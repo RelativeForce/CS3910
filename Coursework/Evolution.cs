@@ -106,7 +106,9 @@ namespace Coursework
         {
             var random = new Random();
 
-            var value = (factor1 + factor2) * PesudoNormalDistribution() / 2;
+            var pull = Math.Abs(factor2 - factor1) * PesudoNormalDistribution() / 2;
+
+            var value = random.NextBool() ? factor1 + pull : factor2 - pull;
 
             if (random.NextDouble() < _mutationProbability)
             {

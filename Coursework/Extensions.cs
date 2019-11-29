@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Coursework
 {
-    public static class ListExtensions
+    public static class Extensions
     {
         public static T PickRandom<T>(this List<T> list)
         {
@@ -16,6 +16,11 @@ namespace Coursework
             list.RemoveAt(index);
 
             return element;
+        }
+
+        public static bool NextBool(this Random r)
+        {
+            return r.Next(2) == 0;
         }
     }
 }
