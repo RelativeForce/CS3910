@@ -6,24 +6,25 @@ namespace Coursework
 {
     public sealed class Hub
     {
-        public const double InitialGlobalPullFactor = 0.1;
-        public const double InitialPersonalPullFactor = 0.5;
+        
         private readonly int _numberOfLocations;
         private readonly List<Day> _days;
+        private readonly IParticleSwarm _particleSwarm;
         private readonly Random _random;
 
-        public Hub(int numberOfLocations, List<Day> days)
+        public Hub(int numberOfLocations, List<Day> days, IParticleSwarm particleSwarm)
         {
             _numberOfLocations = numberOfLocations;
             _days = days;
+            _particleSwarm = particleSwarm;
             _random = new Random();
         }
 
-        public double[] Simulate(int numberOfEstimationParticles, int numberOfIterations)
+        public double[] Simulate(int particleCount)
         {
-            var particles = GenerateParticles(numberOfEstimationParticles);
+            var particles = GenerateParticles(particleCount);
 
-            var position = ParticleSwarm.Simulate(numberOfIterations, 10, particles);
+            var position = _particleSwarm.Simulate(particles);
 
             return position.Vector;
         }
@@ -33,11 +34,11 @@ namespace Coursework
             return _days.Select(d => d.Cost(estimates)).Average();
         }
 
-        public List<Particle> GenerateParticles(int numberOfParticles)
+        public List<Particle> GenerateParticles(int particleCount)
         {
             var particles = new List<Particle>();
 
-            for (int index = 0; index < numberOfParticles; index++)
+            for (int index = 0; index < particleCount; index++)
             {
                 var estimates = new double[_numberOfLocations];
 
@@ -46,11 +47,9 @@ namespace Coursework
                     estimates[estimateIndex] = _random.NextDouble();
                 }
 
-                var personalPull = InitialPersonalPullFactor * _random.NextDouble();
-                var globalPull = InitialGlobalPullFactor * _random.NextDouble();
+                var attraction = _particleSwarm.NewAttraction();
 
-
-                particles.Add(new Particle(new Position(estimates), Cost, new Attraction(personalPull, globalPull)));
+                particles.Add(new Particle(new Position(estimates), Cost, attraction));
             }
 
             return particles;

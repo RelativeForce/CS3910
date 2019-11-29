@@ -20,9 +20,13 @@ namespace Coursework
 
             var days = ReadFile(filePath);
 
-            var hub = new Hub(NumberOfDestinations, days);
+            var evolution = new Evolution(10, 4, 0.05);
 
-            var finalResult = hub.Simulate(100, 100000);
+            var pso = new ParticleSwarm(evolution, 5000);
+
+            var hub = new Hub(NumberOfDestinations, days, pso);
+
+            var finalResult = hub.Simulate(100);
 
             Console.WriteLine($"Best Result: {hub.Cost(finalResult)} [{finalResult.Aggregate("", (s, e) => s + e + " ")}]");
 
@@ -41,11 +45,11 @@ namespace Coursework
                 if(data.Length < NumberOfDestinations + 1)
                     throw new FormatException("Data file does not contain an appropriate amount of data");
 
-                var overallDemand = data[0];
+                var actualDemand = data[0];
 
-                var demandMeasurements = data.Skip(1).ToArray();
+                var measurements = data.Skip(1).ToArray();
 
-                days.Add(new Day(overallDemand, demandMeasurements));
+                days.Add(new Day(actualDemand, measurements));
             }
 
             return days;
