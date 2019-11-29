@@ -4,28 +4,23 @@ using System.Linq;
 
 namespace Coursework
 {
-    public sealed class ParticleSwarm : IParticleSwarm
+    public sealed class EvolvingParticleSwarm : IParticleSwarm
     {
-        public const double InitialGlobalPullFactor = 0.1;
-        public const double InitialPersonalPullFactor = 0.5;
-
         private readonly IEvolution _evolution;
         private readonly int _iterationCount;
+        private readonly double _personalPullFactor;
+        private readonly double _globalPullFactor;
 
-        public ParticleSwarm(IEvolution evolution, int iterationCount)
+        public EvolvingParticleSwarm(IEvolution evolution, int iterationCount, double personalPullFactor, double globalPullFactor)
         {
             _evolution = evolution;
             _iterationCount = iterationCount;
+            _personalPullFactor = personalPullFactor;
+            _globalPullFactor = globalPullFactor;
         }
 
         public Position Simulate(List<Particle> particles)
         {
-            particles.ForEach(p =>
-            {
-                p.EvaluateCurrentPosition();
-                p.TrackPosition();
-            });
-
             Particle.GlobalBest = particles.OrderBy(p => p.Position.Value).First().Position;
 
             for (var i = 0; i < _iterationCount; i++)
@@ -63,8 +58,8 @@ namespace Coursework
         {
             var random = new Random();
 
-            var personalPull = InitialPersonalPullFactor * random.NextDouble();
-            var globalPull = InitialGlobalPullFactor * random.NextDouble();
+            var personalPull = _personalPullFactor * random.NextDouble();
+            var globalPull = _globalPullFactor * random.NextDouble();
 
             return new Attraction(personalPull, globalPull);
         }

@@ -48,7 +48,12 @@ namespace Coursework
 
                 var attraction = _particleSwarm.NewAttraction();
 
-                particles.Add(new Particle(new Position(estimates), Cost, attraction));
+                var particle = new Particle(new Position(estimates), Cost, attraction);
+
+                particle.EvaluateCurrentPosition();
+                particle.TrackPosition();
+
+                particles.Add(particle);
             }
 
             return particles;
