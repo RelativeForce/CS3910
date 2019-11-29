@@ -10,12 +10,12 @@ namespace Coursework
         public const double InitialPersonalPullFactor = 0.5;
 
         private readonly IEvolution _evolution;
-        private readonly int _numberOfIterations;
+        private readonly int _iterationCount;
 
-        public ParticleSwarm(IEvolution evolution, int numberOfIterations)
+        public ParticleSwarm(IEvolution evolution, int iterationCount)
         {
             _evolution = evolution;
-            _numberOfIterations = numberOfIterations;
+            _iterationCount = iterationCount;
         }
 
         public Position Simulate(List<Particle> particles)
@@ -28,7 +28,7 @@ namespace Coursework
 
             Particle.GlobalBest = particles.OrderBy(p => p.Position.Value).First().Position;
 
-            for (var i = 0; i < _numberOfIterations; i++)
+            for (var i = 0; i < _iterationCount; i++)
             {
                 var isEvolutionIteration = _evolution.ShouldEvolve(i);
 

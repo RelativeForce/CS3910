@@ -7,8 +7,15 @@ namespace Coursework
 {
     public sealed class Program
     {
-        private const string DefaultFilePath = "..\\..\\..\\cwk_train.csv";
         private const int NumberOfDestinations = 13;
+
+        // Defaults
+        private const string DefaultFilePath = "..\\..\\..\\cwk_train.csv";
+        private const int DefaultIterationsPerGeneration = 10;
+        private const int DefaultK = 10;
+        private const double DefaultMutationProbability = 0.5;
+        private const int DefaultIterationCount = 5000;
+        private const int DefaultParticleCount = 100;
 
         static void Main(string[] args)
         {
@@ -20,13 +27,13 @@ namespace Coursework
 
             var days = ReadFile(filePath);
 
-            var evolution = new Evolution(10, 4, 0.05);
+            var evolution = new Evolution(DefaultIterationsPerGeneration, DefaultK, DefaultMutationProbability);
 
-            var pso = new ParticleSwarm(evolution, 5000);
+            var pso = new ParticleSwarm(evolution, DefaultIterationCount);
 
             var hub = new Hub(NumberOfDestinations, days, pso);
 
-            var finalResult = hub.Simulate(100);
+            var finalResult = hub.Simulate(DefaultParticleCount);
 
             Console.WriteLine($"Best Result: {hub.Cost(finalResult)} [{finalResult.Aggregate("", (s, e) => s + e + " ")}]");
 

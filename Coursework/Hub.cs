@@ -6,7 +6,6 @@ namespace Coursework
 {
     public sealed class Hub
     {
-        
         private readonly int _numberOfLocations;
         private readonly List<Day> _days;
         private readonly IParticleSwarm _particleSwarm;
@@ -34,15 +33,15 @@ namespace Coursework
             return _days.Select(d => d.Cost(estimates)).Average();
         }
 
-        public List<Particle> GenerateParticles(int particleCount)
+        private List<Particle> GenerateParticles(int particleCount)
         {
             var particles = new List<Particle>();
 
-            for (int index = 0; index < particleCount; index++)
+            for (var index = 0; index < particleCount; index++)
             {
                 var estimates = new double[_numberOfLocations];
 
-                for (int estimateIndex = 0; estimateIndex < _numberOfLocations; estimateIndex++)
+                for (var estimateIndex = 0; estimateIndex < _numberOfLocations; estimateIndex++)
                 {
                     estimates[estimateIndex] = _random.NextDouble();
                 }
