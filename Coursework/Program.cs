@@ -22,6 +22,7 @@ namespace Coursework
         private const int DefaultParticleCount = 100;
         public const double DefaultGlobalPullFactor = 0.1;
         public const double DefaultPersonalPullFactor = 0.5;
+        public const bool ShowNewBestForRunInProgress = false;
 
         static void Main(string[] args)
         {
@@ -34,6 +35,8 @@ namespace Coursework
             var outputFilePath = Console.ReadLine();
             outputFilePath = string.IsNullOrWhiteSpace(outputFilePath) ? DefaultOutputFilePath : outputFilePath;
 
+            var logger = new ConsoleLogger(ShowNewBestForRunInProgress);
+
             var iterationCount = Read($"Please input the number of iterations (enter to use default {DefaultIterationCount}): ", DefaultIterationCount, int.Parse);
             var particleCount = Read($"Please input the number of particle (enter to use default {DefaultParticleCount}): ", DefaultParticleCount, int.Parse);
             var personalPullFactor = Read($"Please input the pull factor for personal best (enter to use default {DefaultPersonalPullFactor}): ", DefaultPersonalPullFactor, double.Parse);
@@ -42,9 +45,14 @@ namespace Coursework
             var isEvolving = IsEvolvingParticleSwarm();
 
             var pso = isEvolving ? 
-                GetEvolvingParticleSwarm(iterationCount, personalPullFactor, globalPullFactor) : 
-                GetBasicParticleSwarm(iterationCount, personalPullFactor, globalPullFactor);
+                GetEvolvingParticleSwarm(logger, iterationCount, personalPullFactor, globalPullFactor) : 
+                GetBasicParticleSwarm(logger, iterationCount, personalPullFactor, globalPullFactor);
 
+            RunAlgorithm(runCount, trainCostEvaluator, pso, particleCount, testCostEvaluator, logger, outputFilePath);
+        }
+
+        private static void RunAlgorithm(int runCount, ICostEvaluator trainCostEvaluator, IParticleSwarm pso, int particleCount, ICostEvaluator testCostEvaluator, IConsoleLogger logger, string outputFilePath)
+        {
             for (var i = 0; i < runCount; i++)
             {
                 var hub = new Hub(NumberOfMeasurments, trainCostEvaluator, pso);
@@ -53,7 +61,7 @@ namespace Coursework
 
                 var cost = testCostEvaluator.Cost(weights);
 
-                Console.WriteLine($"Run: {i} Value: {cost}");
+                logger.LogRunResult(i, cost, weights);
 
                 AppendToResultsFile(outputFilePath, cost, weights);
             }
@@ -70,7 +78,7 @@ namespace Coursework
             return evolvingString.Trim().ToUpper().Equals("Y");
         }
 
-        private static IParticleSwarm GetEvolvingParticleSwarm(int iterationCount, double personalPullFactor, double globalPullFactor)
+        private static IParticleSwarm GetEvolvingParticleSwarm(IConsoleLogger logger, int iterationCount, double personalPullFactor, double globalPullFactor)
         {
             var iterationsPerGeneration = Read($"Please input the number of iterations per generation (enter to use default {DefaultIterationsPerGeneration}): ", DefaultIterationsPerGeneration, int.Parse);
             var mutationProbability = Read($"Please input the probability of mutation (enter to use default {DefaultMutationProbability}): ", DefaultMutationProbability, double.Parse);
@@ -78,12 +86,12 @@ namespace Coursework
 
             var evolution = new Evolution(iterationsPerGeneration, k, mutationProbability);
 
-            return new EvolvingParticleSwarm(evolution, iterationCount, personalPullFactor, globalPullFactor);
+            return new EvolvingParticleSwarm(logger, evolution, iterationCount, personalPullFactor, globalPullFactor);
         }
 
-        private static IParticleSwarm GetBasicParticleSwarm(int iterationCount, double personalPullFactor, double globalPullFactor)
+        private static IParticleSwarm GetBasicParticleSwarm(IConsoleLogger logger, int iterationCount, double personalPullFactor, double globalPullFactor)
         {
-            return new BasicParticleSwarm(iterationCount, personalPullFactor, globalPullFactor);
+            return new BasicParticleSwarm(logger, iterationCount, personalPullFactor, globalPullFactor);
         }
 
         private static void AppendToResultsFile(string filePath, double cost, double[] weights)

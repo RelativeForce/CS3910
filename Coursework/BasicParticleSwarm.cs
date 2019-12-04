@@ -6,12 +6,14 @@ namespace Coursework
 {
     public sealed class BasicParticleSwarm : IParticleSwarm
     {
+        private readonly IConsoleLogger _logger;
         private readonly int _iterationCount;
         private readonly double _personalPullFactor;
         private readonly double _globalPullFactor;
 
-        public BasicParticleSwarm(int iterationCount, double personalPullFactor, double globalPullFactor)
+        public BasicParticleSwarm(IConsoleLogger logger, int iterationCount, double personalPullFactor, double globalPullFactor)
         {
+            _logger = logger;
             _iterationCount = iterationCount;
             _personalPullFactor = personalPullFactor;
             _globalPullFactor = globalPullFactor;
@@ -32,7 +34,7 @@ namespace Coursework
 
                 if (newGlobalBestPosition.Value < Particle.GlobalBest.Value)
                 {
-                    Console.WriteLine($"New Best Found [Iteration: {i} Value: {newGlobalBestPosition.Value}]");
+                    _logger.LogNewBestForRunInProgress(i, newGlobalBestPosition.Value, newGlobalBestPosition.Vector);
                     Particle.GlobalBest = newGlobalBestPosition;
                 }
             }

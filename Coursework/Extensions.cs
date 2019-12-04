@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Coursework
 {
@@ -21,6 +22,26 @@ namespace Coursework
         public static bool NextBool(this Random r)
         {
             return r.Next(2) == 0;
+        }
+
+        public static string Join<T>(this IReadOnlyCollection<T> objects, string joiner = ",")
+        {
+            var builder = new StringBuilder();
+
+            var index = 0;
+            foreach (var element in objects)
+            {
+                builder.Append(element);
+
+                if (index < objects.Count - 1)
+                {
+                    builder.Append(joiner);
+                }
+
+                index++;
+            }
+
+            return builder.ToString();
         }
     }
 }
