@@ -12,9 +12,9 @@ namespace Coursework
         public Position PersonalBest { get; set; }
         public Velocity Velocity { get; private set; }
 
-        private readonly Func<double[], double> _evaluator;
+        private readonly ICostEvaluator _evaluator;
 
-        public Particle(Position position, Func<double[], double> evaluator, Attraction attraction)
+        public Particle(Position position, ICostEvaluator evaluator, Attraction attraction)
         {
             _evaluator = evaluator;
             Velocity = GenerateRandomVelocity(position.Vector.Length);

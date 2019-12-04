@@ -10,28 +10,27 @@ namespace Coursework
         private const int NumberOfMeasurments = 13;
 
         // Defaults
-        private const string DefaultInputFilePath = "..\\..\\..\\cwk_train.csv";
+        private const string TrainDataFilePath = "..\\..\\..\\cwk_train.csv";
+        private const string TestDataFilePath = "..\\..\\..\\cwk_test.csv";
         private const string DefaultOutputFilePath = "..\\..\\..\\output.csv";
         private const bool DefaultIsEvolvingSwarm = true;
         private const int DefaultIterationsPerGeneration = 10;
         private const int DefaultRunCount = 100;
         private const int DefaultK = 10;
-        private const double DefaultMutationProbability = 0.5;
-        private const int DefaultIterationCount = 5000;
+        private const double DefaultMutationProbability = 0.05;
+        private const int DefaultIterationCount = 2000;
         private const int DefaultParticleCount = 100;
         public const double DefaultGlobalPullFactor = 0.1;
         public const double DefaultPersonalPullFactor = 0.5;
 
         static void Main(string[] args)
         {
-            Console.Write($"Please input the data set file path (enter to use default): ");
-            var inputFilePath = Console.ReadLine();
-            inputFilePath = string.IsNullOrWhiteSpace(inputFilePath) ? DefaultInputFilePath : inputFilePath;
-            var days = ReadFile(inputFilePath);
+            var trainCostEvaluator = ReadFile(TrainDataFilePath);
+            var testCostEvaluator = ReadFile(TestDataFilePath);
 
             var runCount = Read($"Please input the number of runs (enter to use default {DefaultRunCount}): ", DefaultRunCount, int.Parse);
 
-            Console.Write($"Please input the output results file path (enter to use default): ");
+            Console.Write("Please input the output results file path (enter to use default): ");
             var outputFilePath = Console.ReadLine();
             outputFilePath = string.IsNullOrWhiteSpace(outputFilePath) ? DefaultOutputFilePath : outputFilePath;
 
@@ -48,11 +47,15 @@ namespace Coursework
 
             for (var i = 0; i < runCount; i++)
             {
-                var hub = new Hub(NumberOfMeasurments, days, pso);
+                var hub = new Hub(NumberOfMeasurments, trainCostEvaluator, pso);
 
-                var finalResult = hub.Simulate(particleCount);
+                var weights = hub.Simulate(particleCount);
 
-                AppendToResultsFile(outputFilePath, hub.Cost(finalResult), finalResult);
+                var cost = testCostEvaluator.Cost(weights);
+
+                Console.WriteLine($"Run: {i} Value: {cost}");
+
+                AppendToResultsFile(outputFilePath, cost, weights);
             }
         }
 
@@ -102,7 +105,7 @@ namespace Coursework
             return parser(stringValue);
         }
 
-        private static List<Day> ReadFile(string filePath)
+        private static ICostEvaluator ReadFile(string filePath)
         {
             var fileText = File.ReadAllText(filePath).Replace("\r", "").Split('\n').Where(l => !string.IsNullOrWhiteSpace(l));
 
@@ -122,7 +125,7 @@ namespace Coursework
                 days.Add(new Day(actualDemand, measurements));
             }
 
-            return days;
+            return new CostEvaluator(days);
         }
     }
 }

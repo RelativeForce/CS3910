@@ -33,9 +33,9 @@ namespace Coursework
             };
         }
 
-        public void EvaluateWith(Func<double[], double> evaluator)
+        public void EvaluateWith(ICostEvaluator evaluator)
         {
-            Value = evaluator(Vector);
+            Value = evaluator.Cost(Vector);
         }
     }
 }

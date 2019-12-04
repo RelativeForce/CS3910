@@ -7,14 +7,14 @@ namespace Coursework
     public sealed class Hub
     {
         private readonly int _numberOfMeasurements;
-        private readonly List<Day> _days;
+        private readonly ICostEvaluator _evaluator;
         private readonly IParticleSwarm _particleSwarm;
         private readonly Random _random;
 
-        public Hub(int numberOfMeasurements, List<Day> days, IParticleSwarm particleSwarm)
+        public Hub(int numberOfMeasurements, ICostEvaluator evaluator, IParticleSwarm particleSwarm)
         {
             _numberOfMeasurements = numberOfMeasurements;
-            _days = days;
+            _evaluator = evaluator;
             _particleSwarm = particleSwarm;
             _random = new Random();
         }
@@ -26,11 +26,6 @@ namespace Coursework
             var position = _particleSwarm.Simulate(particles);
 
             return position.Vector;
-        }
-
-        public double Cost(double[] estimates)
-        {
-            return _days.Select(d => d.Cost(estimates)).Average();
         }
 
         private List<Particle> GenerateParticles(int particleCount)
@@ -48,7 +43,7 @@ namespace Coursework
 
                 var attraction = _particleSwarm.NewAttraction();
 
-                var particle = new Particle(new Position(estimates), Cost, attraction);
+                var particle = new Particle(new Position(estimates), _evaluator, attraction);
 
                 particle.EvaluateCurrentPosition();
                 particle.TrackPosition();
