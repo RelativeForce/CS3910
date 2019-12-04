@@ -29,6 +29,8 @@ namespace Coursework
             var trainCostEvaluator = ReadFile(TrainDataFilePath);
             var testCostEvaluator = ReadFile(TestDataFilePath);
 
+            Console.WriteLine("CS3910 Coursework - Joshua Eddy");
+
             var runCount = Read($"Please input the number of runs (enter to use default {DefaultRunCount}): ", DefaultRunCount, int.Parse);
 
             Console.Write("Please input the output results file path (enter to use default): ");
