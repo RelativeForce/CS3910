@@ -12,16 +12,16 @@ namespace Coursework
         public Position PersonalBest { get; set; }
         public Velocity Velocity { get; private set; }
 
-        private readonly ICostEvaluator _evaluator;
+        private readonly CostEvaluator _evaluator;
 
-        public Particle(Position position, ICostEvaluator evaluator, Attraction attraction)
+        public Particle(Position position, CostEvaluator evaluator, Attraction attraction)
         {
             _evaluator = evaluator;
             Velocity = GenerateRandomVelocity(position.Vector.Length);
             Position = position;
             Attraction = attraction;
-            PersonalBest = Position.Clone();
-            GlobalBest = Position.Clone();
+            PersonalBest = Position;
+            GlobalBest = Position;
         }
 
         public void EvaluateCurrentPosition()
@@ -30,7 +30,7 @@ namespace Coursework
 
             if (Position.Value < PersonalBest.Value)
             {
-                PersonalBest = Position.Clone();
+                PersonalBest = Position;
             }
         }
 

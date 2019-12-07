@@ -53,7 +53,7 @@ namespace Coursework
             RunAlgorithm(runCount, trainCostEvaluator, pso, particleCount, testCostEvaluator, logger, outputFilePath);
         }
 
-        private static void RunAlgorithm(int runCount, ICostEvaluator trainCostEvaluator, IParticleSwarm pso, int particleCount, ICostEvaluator testCostEvaluator, IConsoleLogger logger, string outputFilePath)
+        private static void RunAlgorithm(int runCount, CostEvaluator trainCostEvaluator, IParticleSwarm pso, int particleCount, CostEvaluator testCostEvaluator, ConsoleLogger logger, string outputFilePath)
         {
             for (var i = 0; i < runCount; i++)
             {
@@ -80,7 +80,7 @@ namespace Coursework
             return evolvingString.Trim().ToUpper().Equals("Y");
         }
 
-        private static IParticleSwarm GetEvolvingParticleSwarm(IConsoleLogger logger, int iterationCount, double personalPullFactor, double globalPullFactor)
+        private static IParticleSwarm GetEvolvingParticleSwarm(ConsoleLogger logger, int iterationCount, double personalPullFactor, double globalPullFactor)
         {
             var iterationsPerGeneration = Read($"Please input the number of iterations per generation (enter to use default {DefaultIterationsPerGeneration}): ", DefaultIterationsPerGeneration, int.Parse);
             var mutationProbability = Read($"Please input the probability of mutation (enter to use default {DefaultMutationProbability}): ", DefaultMutationProbability, double.Parse);
@@ -91,7 +91,7 @@ namespace Coursework
             return new EvolvingParticleSwarm(logger, evolution, iterationCount, personalPullFactor, globalPullFactor);
         }
 
-        private static IParticleSwarm GetBasicParticleSwarm(IConsoleLogger logger, int iterationCount, double personalPullFactor, double globalPullFactor)
+        private static IParticleSwarm GetBasicParticleSwarm(ConsoleLogger logger, int iterationCount, double personalPullFactor, double globalPullFactor)
         {
             return new BasicParticleSwarm(logger, iterationCount, personalPullFactor, globalPullFactor);
         }
@@ -115,7 +115,7 @@ namespace Coursework
             return parser(stringValue);
         }
 
-        private static ICostEvaluator ReadFile(string filePath)
+        private static CostEvaluator ReadFile(string filePath)
         {
             var fileText = File.ReadAllText(filePath).Replace("\r", "").Split('\n').Where(l => !string.IsNullOrWhiteSpace(l));
 

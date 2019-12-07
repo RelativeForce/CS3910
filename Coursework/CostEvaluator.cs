@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Coursework
 {
-    public sealed class CostEvaluator : ICostEvaluator
+    public sealed class CostEvaluator
     {
         private readonly List<Day> _days;
 

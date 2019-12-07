@@ -2,7 +2,7 @@
 
 namespace Coursework
 {
-    public sealed class ConsoleLogger : IConsoleLogger
+    public sealed class ConsoleLogger
     {
         private readonly bool _showNewBestForRunInProgress;
 

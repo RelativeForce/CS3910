@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace Coursework
 {
     public sealed class BasicParticleSwarm : IParticleSwarm
     {
-        private readonly IConsoleLogger _logger;
+        private readonly ConsoleLogger _logger;
         private readonly int _iterationCount;
         private readonly double _personalPullFactor;
         private readonly double _globalPullFactor;
 
-        public BasicParticleSwarm(IConsoleLogger logger, int iterationCount, double personalPullFactor, double globalPullFactor)
+        public BasicParticleSwarm(ConsoleLogger logger, int iterationCount, double personalPullFactor, double globalPullFactor)
         {
             _logger = logger;
             _iterationCount = iterationCount;

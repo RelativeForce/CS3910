@@ -55,7 +55,7 @@ namespace Coursework
 
             var velocity = new double[length];
 
-            for (int i = 0; i < velocity.Length; i++)
+            for (var i = 0; i < velocity.Length; i++)
             {
                 velocity[i] = random.NextDouble();
             }

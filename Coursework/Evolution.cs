@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Coursework
 {
-    public sealed class Evolution : IEvolution
+    public sealed class Evolution
     {
         private readonly int _iterationsPerGeneration;
         private readonly int _k;

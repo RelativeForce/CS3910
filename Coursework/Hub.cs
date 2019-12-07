@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Coursework
 {
     public sealed class Hub
     {
         private readonly int _numberOfMeasurements;
-        private readonly ICostEvaluator _evaluator;
+        private readonly CostEvaluator _evaluator;
         private readonly IParticleSwarm _particleSwarm;
         private readonly Random _random;
 
-        public Hub(int numberOfMeasurements, ICostEvaluator evaluator, IParticleSwarm particleSwarm)
+        public Hub(int numberOfMeasurements, CostEvaluator evaluator, IParticleSwarm particleSwarm)
         {
             _numberOfMeasurements = numberOfMeasurements;
             _evaluator = evaluator;

@@ -6,13 +6,13 @@ namespace Coursework
 {
     public sealed class EvolvingParticleSwarm : IParticleSwarm
     {
-        private readonly IConsoleLogger _logger;
-        private readonly IEvolution _evolution;
+        private readonly ConsoleLogger _logger;
+        private readonly Evolution _evolution;
         private readonly int _iterationCount;
         private readonly double _personalPullFactor;
         private readonly double _globalPullFactor;
 
-        public EvolvingParticleSwarm(IConsoleLogger logger, IEvolution evolution, int iterationCount, double personalPullFactor, double globalPullFactor)
+        public EvolvingParticleSwarm(ConsoleLogger logger, Evolution evolution, int iterationCount, double personalPullFactor, double globalPullFactor)
         {
             _logger = logger;
             _evolution = evolution;
