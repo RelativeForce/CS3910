@@ -106,7 +106,7 @@ namespace Coursework
         {
             var random = new Random();
 
-            var pull = Math.Abs(factor2 - factor1) * PesudoNormalDistribution() / 2;
+            var pull = Math.Abs(factor2 - factor1) * random.NextParabolicDouble() / 2;
 
             var value = random.NextBool() ? factor1 + pull : factor2 - pull;
 
@@ -116,13 +116,6 @@ namespace Coursework
             }
 
             return value;
-        }
-
-        private static double PesudoNormalDistribution()
-        {
-            var random = new Random();
-
-            return (Math.Pow(random.NextDouble(), 2) * -1) + 1;
         }
 
         private static List<Attraction> Survivors(List<Attraction> children, List<Attraction> currentGeneration)

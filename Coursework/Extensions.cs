@@ -24,6 +24,11 @@ namespace Coursework
             return r.Next(2) == 0;
         }
 
+        public static double NextParabolicDouble(this Random r)
+        {
+            return (Math.Pow(r.NextDouble(), 2) * -1) + 1;
+        }
+
         public static string Join<T>(this IReadOnlyCollection<T> objects, string joiner = ",")
         {
             var builder = new StringBuilder();
