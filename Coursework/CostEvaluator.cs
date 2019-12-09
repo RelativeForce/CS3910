@@ -12,9 +12,9 @@ namespace Coursework
             _days = days;
         }
 
-        public double Cost(double[] estimates)
+        public double Cost(double[] weights)
         {
-            return _days.Select(d => d.Cost(estimates)).Average();
+            return _days.Select(d => d.Cost(weights)).Average();
         }
     }
 }
