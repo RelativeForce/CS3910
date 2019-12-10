@@ -81,14 +81,14 @@ namespace Coursework
                 var parent1 = parents.PickRandom();
                 var parent2 = parents.PickRandom();
 
-                var child1Personal = Recombine(parent1.PersonalPullFactor, parent2.GlobalPullFactor);
-                var child1Global = Recombine(parent2.PersonalPullFactor, parent1.GlobalPullFactor);
+                var child1Cognitive = Recombine(parent1.CognitiveAttraction, parent2.SocialAttraction);
+                var child1Social = Recombine(parent2.CognitiveAttraction, parent1.SocialAttraction);
 
-                var child2Personal = Recombine(parent2.PersonalPullFactor, parent1.GlobalPullFactor);
-                var child2Global = Recombine(parent1.PersonalPullFactor, parent2.GlobalPullFactor);
+                var child2Cognitive = Recombine(parent2.CognitiveAttraction, parent1.SocialAttraction);
+                var child2Social = Recombine(parent1.CognitiveAttraction, parent2.SocialAttraction);
 
-                var child1 = new Attraction(child1Personal, child1Global);
-                var child2 = new Attraction(child2Personal, child2Global);
+                var child1 = new Attraction(child1Cognitive, child1Social);
+                var child2 = new Attraction(child2Cognitive, child2Social);
 
                 children.Add(child1);
                 children.Add(child2);

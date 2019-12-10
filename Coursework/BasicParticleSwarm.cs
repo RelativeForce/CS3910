@@ -7,15 +7,15 @@ namespace Coursework
     {
         private readonly ConsoleLogger _logger;
         private readonly int _iterationCount;
-        private readonly double _personalPullFactor;
-        private readonly double _globalPullFactor;
+        private readonly double _cognitiveAttraction;
+        private readonly double _socialAttraction;
 
-        public BasicParticleSwarm(ConsoleLogger logger, int iterationCount, double personalPullFactor, double globalPullFactor)
+        public BasicParticleSwarm(ConsoleLogger logger, int iterationCount, double cognitiveAttraction, double socialAttraction)
         {
             _logger = logger;
             _iterationCount = iterationCount;
-            _personalPullFactor = personalPullFactor;
-            _globalPullFactor = globalPullFactor;
+            _cognitiveAttraction = cognitiveAttraction;
+            _socialAttraction = socialAttraction;
         }
 
         public Position Simulate(List<Particle> particles)
@@ -43,7 +43,7 @@ namespace Coursework
 
         public Attraction NewAttraction()
         {
-            return new Attraction(_personalPullFactor, _globalPullFactor);
+            return new Attraction(_cognitiveAttraction, _socialAttraction);
         }
     }
 }

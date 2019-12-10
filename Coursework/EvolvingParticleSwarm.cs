@@ -9,16 +9,16 @@ namespace Coursework
         private readonly ConsoleLogger _logger;
         private readonly Evolution _evolution;
         private readonly int _iterationCount;
-        private readonly double _personalPullFactor;
-        private readonly double _globalPullFactor;
+        private readonly double _cognitiveAttraction;
+        private readonly double _socialAttraction;
 
-        public EvolvingParticleSwarm(ConsoleLogger logger, Evolution evolution, int iterationCount, double personalPullFactor, double globalPullFactor)
+        public EvolvingParticleSwarm(ConsoleLogger logger, Evolution evolution, int iterationCount, double cognitiveAttraction, double socialAttraction)
         {
             _logger = logger;
             _evolution = evolution;
             _iterationCount = iterationCount;
-            _personalPullFactor = personalPullFactor;
-            _globalPullFactor = globalPullFactor;
+            _cognitiveAttraction = cognitiveAttraction;
+            _socialAttraction = socialAttraction;
         }
 
         public Position Simulate(List<Particle> particles)
@@ -60,10 +60,10 @@ namespace Coursework
         {
             var random = new Random();
 
-            var personalPull = _personalPullFactor * random.NextDouble();
-            var globalPull = _globalPullFactor * random.NextDouble();
+            var cognitiveAttraction = _cognitiveAttraction * random.NextDouble();
+            var socialAttraction = _socialAttraction * random.NextDouble();
 
-            return new Attraction(personalPull, globalPull);
+            return new Attraction(cognitiveAttraction, socialAttraction);
         }
     }
 }

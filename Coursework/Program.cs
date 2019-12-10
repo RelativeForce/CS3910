@@ -7,7 +7,7 @@ namespace Coursework
 {
     public sealed class Program
     {
-        private const int NumberOfMeasurments = 13;
+        private const int NumberOfMeasurements = 13;
 
         // Defaults
         private const string TrainDataFilePath = "..\\..\\..\\cwk_train.csv";
@@ -20,8 +20,8 @@ namespace Coursework
         private const double DefaultMutationProbability = 0.05;
         private const int DefaultIterationCount = 2000;
         private const int DefaultParticleCount = 100;
-        public const double DefaultGlobalPullFactor = 0.1;
-        public const double DefaultPersonalPullFactor = 0.5;
+        public const double DefaultSocialAttraction = 0.1;
+        public const double DefaultCognitiveAttraction = 0.5;
         public const bool ShowNewBestForRunInProgress = false;
 
         static void Main(string[] args)
@@ -41,14 +41,14 @@ namespace Coursework
 
             var iterationCount = Read($"Please input the number of iterations (enter to use default {DefaultIterationCount}): ", DefaultIterationCount, int.Parse);
             var particleCount = Read($"Please input the number of particle (enter to use default {DefaultParticleCount}): ", DefaultParticleCount, int.Parse);
-            var personalPullFactor = Read($"Please input the pull factor for personal best (enter to use default {DefaultPersonalPullFactor}): ", DefaultPersonalPullFactor, double.Parse);
-            var globalPullFactor = Read($"Please input the pull factor for global best (enter to use default {DefaultGlobalPullFactor}): ", DefaultGlobalPullFactor, double.Parse);
+            var cognitiveAttraction = Read($"Please input the cognitive attraction factor (enter to use default {DefaultCognitiveAttraction}): ", DefaultCognitiveAttraction, double.Parse);
+            var socialAttraction = Read($"Please input the social attraction factor (enter to use default {DefaultSocialAttraction}): ", DefaultSocialAttraction, double.Parse);
 
             var isEvolving = IsEvolvingParticleSwarm();
 
             var pso = isEvolving ? 
-                GetEvolvingParticleSwarm(logger, iterationCount, personalPullFactor, globalPullFactor) : 
-                GetBasicParticleSwarm(logger, iterationCount, personalPullFactor, globalPullFactor);
+                GetEvolvingParticleSwarm(logger, iterationCount, cognitiveAttraction, socialAttraction) : 
+                GetBasicParticleSwarm(logger, iterationCount, cognitiveAttraction, socialAttraction);
 
             RunAlgorithm(runCount, trainCostEvaluator, pso, particleCount, testCostEvaluator, logger, outputFilePath);
         }
@@ -57,7 +57,7 @@ namespace Coursework
         {
             for (var i = 0; i < runCount; i++)
             {
-                var hub = new Hub(NumberOfMeasurments, trainCostEvaluator, pso);
+                var hub = new Hub(NumberOfMeasurements, trainCostEvaluator, pso);
 
                 var weights = hub.Simulate(particleCount);
 
@@ -80,7 +80,7 @@ namespace Coursework
             return evolvingString.Trim().ToUpper().Equals("Y");
         }
 
-        private static IParticleSwarm GetEvolvingParticleSwarm(ConsoleLogger logger, int iterationCount, double personalPullFactor, double globalPullFactor)
+        private static IParticleSwarm GetEvolvingParticleSwarm(ConsoleLogger logger, int iterationCount, double cognitiveAttraction, double socialAttraction)
         {
             var iterationsPerGeneration = Read($"Please input the number of iterations per generation (enter to use default {DefaultIterationsPerGeneration}): ", DefaultIterationsPerGeneration, int.Parse);
             var mutationProbability = Read($"Please input the probability of mutation (enter to use default {DefaultMutationProbability}): ", DefaultMutationProbability, double.Parse);
@@ -88,12 +88,12 @@ namespace Coursework
 
             var evolution = new Evolution(iterationsPerGeneration, k, mutationProbability);
 
-            return new EvolvingParticleSwarm(logger, evolution, iterationCount, personalPullFactor, globalPullFactor);
+            return new EvolvingParticleSwarm(logger, evolution, iterationCount, cognitiveAttraction, socialAttraction);
         }
 
-        private static IParticleSwarm GetBasicParticleSwarm(ConsoleLogger logger, int iterationCount, double personalPullFactor, double globalPullFactor)
+        private static IParticleSwarm GetBasicParticleSwarm(ConsoleLogger logger, int iterationCount, double cognitiveAttraction, double socialAttraction)
         {
-            return new BasicParticleSwarm(logger, iterationCount, personalPullFactor, globalPullFactor);
+            return new BasicParticleSwarm(logger, iterationCount, cognitiveAttraction, socialAttraction);
         }
 
         private static void AppendToResultsFile(string filePath, double cost, double[] weights)
@@ -125,7 +125,7 @@ namespace Coursework
             {
                 var data = line.Split(',').Select(double.Parse).ToArray();
 
-                if(data.Length < NumberOfMeasurments + 1)
+                if(data.Length < NumberOfMeasurements + 1)
                     throw new FormatException("Data file does not contain an appropriate amount of data");
 
                 var actualDemand = data[0];

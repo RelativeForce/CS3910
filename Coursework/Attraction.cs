@@ -6,16 +6,16 @@ namespace Coursework
     {
         public const double Inertia = 0.01;
 
-        public readonly double PersonalPullFactor;
-        public readonly double GlobalPullFactor;
+        public readonly double CognitiveAttraction;
+        public readonly double SocialAttraction;
 
         private double _trackedValue;
         private double _mostRecentValue;
 
-        public Attraction(double personalPullFactor, double globalPullFactor)
+        public Attraction(double cognitiveAttraction, double socialAttraction)
         {
-            PersonalPullFactor = personalPullFactor;
-            GlobalPullFactor = globalPullFactor;
+            CognitiveAttraction = cognitiveAttraction;
+            SocialAttraction = socialAttraction;
             _trackedValue = double.MaxValue;
             _mostRecentValue = double.MaxValue;
         }
@@ -42,8 +42,8 @@ namespace Coursework
             for (var i = 0; i < newVelocity.Length; i++)
             {
                 newVelocity[i] =  ((Inertia * currentVelocity.Vector[i]) + 
-                                   (r1[i] * GlobalPullFactor * globalBestVector[i]) +
-                                   (r2[i] * PersonalPullFactor * personalBestVector[i]));
+                                   (r1[i] * SocialAttraction * globalBestVector[i]) +
+                                   (r2[i] * CognitiveAttraction * personalBestVector[i]));
             }
 
             return new Velocity(newVelocity);
