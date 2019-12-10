@@ -5,14 +5,14 @@ namespace Coursework
 {
     public sealed class ParticleSwarmSimulator
     {
-        private readonly int _numberOfMeasurements;
+        private readonly int _weightCount;
         private readonly CostEvaluator _evaluator;
         private readonly IParticleSwarm _particleSwarm;
         private readonly Random _random;
 
-        public ParticleSwarmSimulator(int numberOfMeasurements, CostEvaluator evaluator, IParticleSwarm particleSwarm)
+        public ParticleSwarmSimulator(int weightCount, CostEvaluator evaluator, IParticleSwarm particleSwarm)
         {
-            _numberOfMeasurements = numberOfMeasurements;
+            _weightCount = weightCount;
             _evaluator = evaluator;
             _particleSwarm = particleSwarm;
             _random = new Random();
@@ -33,16 +33,16 @@ namespace Coursework
 
             for (var index = 0; index < particleCount; index++)
             {
-                var estimates = new double[_numberOfMeasurements];
+                var weights = new double[_weightCount];
 
-                for (var estimateIndex = 0; estimateIndex < _numberOfMeasurements; estimateIndex++)
+                for (var weightIndex = 0; weightIndex < _weightCount; weightIndex++)
                 {
-                    estimates[estimateIndex] = _random.NextDouble();
+                    weights[weightIndex] = _random.NextDouble();
                 }
 
                 var attraction = _particleSwarm.NewAttraction();
 
-                var particle = new Particle(new Position(estimates), _evaluator, attraction);
+                var particle = new Particle(new Position(weights), _evaluator, attraction);
 
                 particle.EvaluateCurrentPosition();
                 particle.TrackPosition();

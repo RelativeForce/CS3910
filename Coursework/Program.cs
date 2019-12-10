@@ -45,10 +45,10 @@ namespace Coursework
                 GetEvolvingParticleSwarm(logger, iterationCount, cognitiveAttraction, socialAttraction) : 
                 GetBasicParticleSwarm(logger, iterationCount, cognitiveAttraction, socialAttraction);
 
-            RunAlgorithm(runCount, trainCostEvaluator, pso, particleCount, testCostEvaluator, logger, outputFilePath);
+            RunAlgorithm(runCount, trainCostEvaluator, testCostEvaluator, pso, particleCount, logger, outputFilePath);
         }
 
-        private static void RunAlgorithm(int runCount, CostEvaluator trainCostEvaluator, IParticleSwarm pso, int particleCount, CostEvaluator testCostEvaluator, ConsoleLogger logger, string outputFilePath)
+        private static void RunAlgorithm(int runCount, CostEvaluator trainCostEvaluator, CostEvaluator testCostEvaluator, IParticleSwarm pso, int particleCount, ConsoleLogger logger, string outputFilePath)
         {
             Console.WriteLine($"Starting {runCount} runs...");
 
