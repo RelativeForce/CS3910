@@ -28,17 +28,12 @@ namespace Coursework
         {
             var trainCostEvaluator = ReadDataFile(TrainDataFilePath);
             var testCostEvaluator = ReadDataFile(TestDataFilePath);
+            var logger = new ConsoleLogger(ShowNewBestForRunInProgress);
 
             Console.WriteLine("CS3910 Coursework - Joshua Eddy");
 
             var runCount = Read($"Number of runs (enter to use default {DefaultRunCount}): ", DefaultRunCount, int.Parse);
-
-            Console.Write($"Output results file path (enter to use default '{DefaultOutputFilePath}'): ");
-            var outputFilePath = Console.ReadLine();
-            outputFilePath = string.IsNullOrWhiteSpace(outputFilePath) ? DefaultOutputFilePath : outputFilePath;
-
-            var logger = new ConsoleLogger(ShowNewBestForRunInProgress);
-
+            var outputFilePath = Read($"Output results file path (enter to use default '{DefaultOutputFilePath}'): ", DefaultOutputFilePath, s => s);
             var iterationCount = Read($"Number of iterations (enter to use default {DefaultIterationCount}): ", DefaultIterationCount, int.Parse);
             var particleCount = Read($"Number of particle (enter to use default {DefaultParticleCount}): ", DefaultParticleCount, int.Parse);
             var cognitiveAttraction = Read($"Cognitive attraction factor (enter to use default {DefaultCognitiveAttraction}): ", DefaultCognitiveAttraction, double.Parse);
@@ -55,6 +50,8 @@ namespace Coursework
 
         private static void RunAlgorithm(int runCount, CostEvaluator trainCostEvaluator, IParticleSwarm pso, int particleCount, CostEvaluator testCostEvaluator, ConsoleLogger logger, string outputFilePath)
         {
+            Console.WriteLine($"Starting {runCount} runs...");
+
             for (var i = 0; i < runCount; i++)
             {
                 var hub = new Hub(NumberOfMeasurements, trainCostEvaluator, pso);
