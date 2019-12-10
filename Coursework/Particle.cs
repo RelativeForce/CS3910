@@ -5,11 +5,9 @@ namespace Coursework
 {
     public class Particle
     {
-        public static Position GlobalBest { get; set; }
-
-        public Position Position { get; private set; }
         public Attraction Attraction { get; set; }
-        public Position PersonalBest { get; set; }
+        public Position Position { get; private set; }
+        public Position PersonalBest { get; private set; }
         public Velocity Velocity { get; private set; }
 
         private readonly CostEvaluator _evaluator;
@@ -21,7 +19,6 @@ namespace Coursework
             Position = position;
             Attraction = attraction;
             PersonalBest = Position;
-            GlobalBest = Position;
         }
 
         public void EvaluateCurrentPosition()
@@ -34,9 +31,9 @@ namespace Coursework
             }
         }
 
-        public void Move()
+        public void Move(Position globalBest)
         {
-            UpdateVelocity();
+            UpdateVelocity(globalBest);
 
             UpdatePosition();
 
@@ -55,12 +52,12 @@ namespace Coursework
             Position = new Position(Enumerable.Zip(Position.Vector, Velocity.Vector, (v1, v2) => v1 + v2).ToArray());
         }
 
-        private void UpdateVelocity()
+        private void UpdateVelocity(Position globalBest)
         {
             Velocity = Attraction.Apply(
                 Velocity, 
                 Position.VectorTo(PersonalBest), 
-                Position.VectorTo(GlobalBest));
+                Position.VectorTo(globalBest));
         }
 
         private static Velocity GenerateRandomVelocity(int length)
@@ -69,7 +66,7 @@ namespace Coursework
 
             var velocity = new double[length];
 
-            for (int i = 0; i < velocity.Length; i++)
+            for (var i = 0; i < velocity.Length; i++)
             {
                 velocity[i] = random.NextDouble();
             }

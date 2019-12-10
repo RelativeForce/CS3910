@@ -20,25 +20,25 @@ namespace Coursework
 
         public Position Simulate(List<Particle> particles)
         {
-            Particle.GlobalBest = particles.OrderBy(p => p.Position.Value).First().Position;
+            var globalBest = particles.OrderBy(p => p.Position.Value).First().Position;
 
             for (var i = 0; i < _iterationCount; i++)
             {
                 foreach (var particle in particles.AsParallel())
                 {
-                    particle.Move();
+                    particle.Move(globalBest);
                 }
 
                 var newGlobalBestPosition = particles.OrderBy(p => p.Position.Value).First().Position;
 
-                if (newGlobalBestPosition.Value < Particle.GlobalBest.Value)
+                if (newGlobalBestPosition.Value < globalBest.Value)
                 {
                     _logger.LogNewBestForRunInProgress(i, newGlobalBestPosition.Value, newGlobalBestPosition.Vector);
-                    Particle.GlobalBest = newGlobalBestPosition;
+                    globalBest = newGlobalBestPosition;
                 }
             }
 
-            return Particle.GlobalBest;
+            return globalBest;
         }
 
         public Attraction NewAttraction()
