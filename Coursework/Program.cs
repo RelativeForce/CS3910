@@ -54,9 +54,9 @@ namespace Coursework
 
             for (var i = 0; i < runCount; i++)
             {
-                var hub = new Hub(NumberOfMeasurements, trainCostEvaluator, pso);
+                var simulator = new ParticleSwarmSimulator(NumberOfMeasurements, trainCostEvaluator, pso);
 
-                var weights = hub.Simulate(particleCount);
+                var weights = simulator.Simulate(particleCount);
 
                 var cost = testCostEvaluator.Cost(weights);
 

@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 namespace Coursework
 {
-    public sealed class Hub
+    public sealed class ParticleSwarmSimulator
     {
         private readonly int _numberOfMeasurements;
         private readonly CostEvaluator _evaluator;
         private readonly IParticleSwarm _particleSwarm;
         private readonly Random _random;
 
-        public Hub(int numberOfMeasurements, CostEvaluator evaluator, IParticleSwarm particleSwarm)
+        public ParticleSwarmSimulator(int numberOfMeasurements, CostEvaluator evaluator, IParticleSwarm particleSwarm)
         {
             _numberOfMeasurements = numberOfMeasurements;
             _evaluator = evaluator;
