@@ -1,19 +1,12 @@
-﻿using System.Linq;
-
-namespace Coursework
+﻿namespace Coursework
 {
     public sealed class Velocity
     {
-        public double[] Vector { get; set; }
+        public double[] Vector { get; }
 
         public Velocity(double[] vector)
         {
             Vector = vector;
-        }
-
-        public Velocity Clone()
-        {
-            return new Velocity(Vector.ToArray());
         }
     }
 }
