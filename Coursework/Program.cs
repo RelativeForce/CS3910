@@ -7,11 +7,11 @@ namespace Coursework
 {
     public sealed class Program
     {
-        private const int NumberOfMeasurements = 13;
+        private const bool ShowNewBestForRunInProgress = false;
 
-        // Defaults
-        private const string TrainDataFilePath = "..\\..\\..\\cwk_train.csv";
-        private const string TestDataFilePath = "..\\..\\..\\cwk_test.csv";
+        // Default parameters
+        private const string DefaultTrainDataFilePath = "..\\..\\..\\cwk_train.csv";
+        private const string DefaultTestDataFilePath = "..\\..\\..\\cwk_test.csv";
         private const string DefaultOutputFilePath = "..\\..\\..\\output.csv";
         private const bool DefaultIsEvolvingSwarm = true;
         private const int DefaultIterationsPerGeneration = 10;
@@ -20,19 +20,23 @@ namespace Coursework
         private const double DefaultMutationProbability = 0.05;
         private const int DefaultIterationCount = 2000;
         private const int DefaultParticleCount = 100;
-        public const double DefaultSocialAttraction = 0.1;
-        public const double DefaultCognitiveAttraction = 0.5;
-        public const bool ShowNewBestForRunInProgress = false;
+        private const double DefaultSocialAttraction = 0.1;
+        private const double DefaultCognitiveAttraction = 0.5;
 
         static void Main(string[] args)
         {
-            var trainCostEvaluator = ReadDataFile(TrainDataFilePath);
-            var testCostEvaluator = ReadDataFile(TestDataFilePath);
             var logger = new ConsoleLogger(ShowNewBestForRunInProgress);
 
             Console.WriteLine("CS3910 Coursework - Joshua Eddy");
 
             var runCount = Read($"Number of runs (enter to use default {DefaultRunCount}): ", DefaultRunCount, int.Parse);
+
+            var trainDataFilePath = Read($"Training data file path (enter to use default '{DefaultTrainDataFilePath}'): ", DefaultTrainDataFilePath, s => s);
+            var trainCostEvaluator = ReadDataFile(trainDataFilePath);
+
+            var testDataFilePath = Read($"Test data file path (enter to use default '{DefaultTestDataFilePath}'): ", DefaultTestDataFilePath, s => s);
+            var testCostEvaluator = ReadDataFile(testDataFilePath);
+            
             var outputFilePath = Read($"Output results file path (enter to use default '{DefaultOutputFilePath}'): ", DefaultOutputFilePath, s => s);
             var iterationCount = Read($"Number of iterations (enter to use default {DefaultIterationCount}): ", DefaultIterationCount, int.Parse);
             var particleCount = Read($"Number of particle (enter to use default {DefaultParticleCount}): ", DefaultParticleCount, int.Parse);
@@ -54,7 +58,7 @@ namespace Coursework
 
             for (var i = 0; i < runCount; i++)
             {
-                var simulator = new ParticleSwarmSimulator(NumberOfMeasurements, trainCostEvaluator, pso);
+                var simulator = new ParticleSwarmSimulator(trainCostEvaluator, pso);
 
                 var weights = simulator.Simulate(particleCount);
 
@@ -121,22 +125,29 @@ namespace Coursework
                 .Where(l => !string.IsNullOrWhiteSpace(l));
 
             var days = new List<Day>();
+            var weightCount = -1;
 
             foreach (var line in fileText)
             {
                 var data = line.Split(',').Select(double.Parse).ToArray();
 
-                if(data.Length < NumberOfMeasurements + 1)
-                    throw new FormatException("Data file does not contain an appropriate amount of data");
-
                 var actualDemand = data[0];
 
                 var measurements = data.Skip(1).ToArray();
 
+                if (weightCount == -1)
+                {
+                    weightCount = measurements.Length;
+                }
+                else if (weightCount != measurements.Length)
+                {
+                    throw new FormatException("Each row must have the same amount of data");
+                }
+
                 days.Add(new Day(actualDemand, measurements));
             }
 
-            return new CostEvaluator(days);
+            return new CostEvaluator(days, weightCount);
         }
     }
 }

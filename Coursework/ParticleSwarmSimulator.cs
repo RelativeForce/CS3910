@@ -5,14 +5,12 @@ namespace Coursework
 {
     public sealed class ParticleSwarmSimulator
     {
-        private readonly int _weightCount;
         private readonly CostEvaluator _evaluator;
         private readonly IParticleSwarm _particleSwarm;
         private readonly Random _random;
 
-        public ParticleSwarmSimulator(int weightCount, CostEvaluator evaluator, IParticleSwarm particleSwarm)
+        public ParticleSwarmSimulator(CostEvaluator evaluator, IParticleSwarm particleSwarm)
         {
-            _weightCount = weightCount;
             _evaluator = evaluator;
             _particleSwarm = particleSwarm;
             _random = new Random();
@@ -33,9 +31,9 @@ namespace Coursework
 
             for (var index = 0; index < particleCount; index++)
             {
-                var weights = new double[_weightCount];
+                var weights = new double[_evaluator.WeightCount];
 
-                for (var weightIndex = 0; weightIndex < _weightCount; weightIndex++)
+                for (var weightIndex = 0; weightIndex < _evaluator.WeightCount; weightIndex++)
                 {
                     weights[weightIndex] = _random.NextDouble();
                 }
