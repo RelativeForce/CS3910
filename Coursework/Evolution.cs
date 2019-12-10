@@ -39,6 +39,7 @@ namespace Coursework
 
             var survivors = Survivors(children, currentGeneration);
 
+            // Redistribute the next generation back to the hosts
             for (int i = 0; i < hosts.Count; i++)
             {
                 hosts[i].Attraction = survivors[i];

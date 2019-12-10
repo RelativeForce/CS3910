@@ -26,6 +26,8 @@ namespace Coursework
 
         public static double NextParabolicDouble(this Random r)
         {
+            // An a random value between 0 and 1 that falls on an inverse parabola that
+            // peaks at 1 and intercepts the x axis at -1 and 1.
             return (Math.Pow(r.NextDouble(), 2) * -1) + 1;
         }
 

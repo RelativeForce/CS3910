@@ -26,23 +26,23 @@ namespace Coursework
 
         static void Main(string[] args)
         {
-            var trainCostEvaluator = ReadFile(TrainDataFilePath);
-            var testCostEvaluator = ReadFile(TestDataFilePath);
+            var trainCostEvaluator = ReadDataFile(TrainDataFilePath);
+            var testCostEvaluator = ReadDataFile(TestDataFilePath);
 
             Console.WriteLine("CS3910 Coursework - Joshua Eddy");
 
-            var runCount = Read($"Please input the number of runs (enter to use default {DefaultRunCount}): ", DefaultRunCount, int.Parse);
+            var runCount = Read($"Number of runs (enter to use default {DefaultRunCount}): ", DefaultRunCount, int.Parse);
 
-            Console.Write("Please input the output results file path (enter to use default): ");
+            Console.Write($"Output results file path (enter to use default '{DefaultOutputFilePath}'): ");
             var outputFilePath = Console.ReadLine();
             outputFilePath = string.IsNullOrWhiteSpace(outputFilePath) ? DefaultOutputFilePath : outputFilePath;
 
             var logger = new ConsoleLogger(ShowNewBestForRunInProgress);
 
-            var iterationCount = Read($"Please input the number of iterations (enter to use default {DefaultIterationCount}): ", DefaultIterationCount, int.Parse);
-            var particleCount = Read($"Please input the number of particle (enter to use default {DefaultParticleCount}): ", DefaultParticleCount, int.Parse);
-            var cognitiveAttraction = Read($"Please input the cognitive attraction factor (enter to use default {DefaultCognitiveAttraction}): ", DefaultCognitiveAttraction, double.Parse);
-            var socialAttraction = Read($"Please input the social attraction factor (enter to use default {DefaultSocialAttraction}): ", DefaultSocialAttraction, double.Parse);
+            var iterationCount = Read($"Number of iterations (enter to use default {DefaultIterationCount}): ", DefaultIterationCount, int.Parse);
+            var particleCount = Read($"Number of particle (enter to use default {DefaultParticleCount}): ", DefaultParticleCount, int.Parse);
+            var cognitiveAttraction = Read($"Cognitive attraction factor (enter to use default {DefaultCognitiveAttraction}): ", DefaultCognitiveAttraction, double.Parse);
+            var socialAttraction = Read($"Social attraction factor (enter to use default {DefaultSocialAttraction}): ", DefaultSocialAttraction, double.Parse);
 
             var isEvolving = IsEvolvingParticleSwarm();
 
@@ -71,7 +71,7 @@ namespace Coursework
 
         private static bool IsEvolvingParticleSwarm()
         {
-            Console.Write($"Please input whether particle attraction evolves y/n (enter to use default {(DefaultIsEvolvingSwarm ? "y" : "n")}): ");
+            Console.Write($"Use evolutionary parameter optimisation? y/n (enter to use default {(DefaultIsEvolvingSwarm ? "y" : "n")}): ");
             var evolvingString = Console.ReadLine();
 
             if (string.IsNullOrWhiteSpace(evolvingString))
@@ -82,9 +82,9 @@ namespace Coursework
 
         private static IParticleSwarm GetEvolvingParticleSwarm(ConsoleLogger logger, int iterationCount, double cognitiveAttraction, double socialAttraction)
         {
-            var iterationsPerGeneration = Read($"Please input the number of iterations per generation (enter to use default {DefaultIterationsPerGeneration}): ", DefaultIterationsPerGeneration, int.Parse);
-            var mutationProbability = Read($"Please input the probability of mutation (enter to use default {DefaultMutationProbability}): ", DefaultMutationProbability, double.Parse);
-            var k = Read($"Please input the tournament size (enter to use default {DefaultK}): ", DefaultK, int.Parse);
+            var iterationsPerGeneration = Read($"Number of iterations per generation (enter to use default {DefaultIterationsPerGeneration}): ", DefaultIterationsPerGeneration, int.Parse);
+            var mutationProbability = Read($"Probability of mutation (enter to use default {DefaultMutationProbability}): ", DefaultMutationProbability, double.Parse);
+            var k = Read($"Tournament size (enter to use default {DefaultK}): ", DefaultK, int.Parse);
 
             var evolution = new Evolution(iterationsPerGeneration, k, mutationProbability);
 
@@ -115,9 +115,13 @@ namespace Coursework
             return parser(stringValue);
         }
 
-        private static CostEvaluator ReadFile(string filePath)
+        private static CostEvaluator ReadDataFile(string filePath)
         {
-            var fileText = File.ReadAllText(filePath).Replace("\r", "").Split('\n').Where(l => !string.IsNullOrWhiteSpace(l));
+            var fileText = File
+                .ReadAllText(filePath)
+                .Replace("\r", "")
+                .Split('\n')
+                .Where(l => !string.IsNullOrWhiteSpace(l));
 
             var days = new List<Day>();
 
