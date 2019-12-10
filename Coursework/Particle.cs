@@ -54,10 +54,10 @@ namespace Coursework
 
         private void UpdateVelocity(Position globalBest)
         {
-            Velocity = Attraction.Apply(
-                Velocity, 
-                Position.VectorTo(PersonalBest), 
-                Position.VectorTo(globalBest));
+            var personalBestVector = Position.VectorTo(PersonalBest);
+            var globalBestVector = Position.VectorTo(globalBest);
+
+            Velocity = Attraction.Apply(Velocity, personalBestVector, globalBestVector);
         }
 
         private static Velocity GenerateRandomVelocity(int length)
